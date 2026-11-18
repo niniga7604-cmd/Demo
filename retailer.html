@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ARYX RETAIL STUDIO — Furniture &amp; Electronics Digital Showroom Demo</title>
+  <meta name="description" content="ARYX RETAIL STUDIO — Luxury Furniture & Electronics Digital Showroom with WhatsApp Quick-Order Catalogue. Built by AryxWeb." />
+
+  <!-- Google Fonts: Plus Jakarta Sans & Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+          },
+          colors: {
+            brand: {
+              slate: '#0F172A',
+              charcoal: '#1E293B',
+              emerald: '#059669',
+              emeraldLight: '#10B981',
+              cream: '#F8FAFC',
+            }
+          },
+          boxShadow: {
+            'luxury': '0 10px 40px -10px rgba(15, 23, 42, 0.08)',
+            'luxury-hover': '0 20px 45px -12px rgba(15, 23, 42, 0.14)',
+            'emerald-glow': '0 10px 25px -5px rgba(5, 150, 105, 0.35)',
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background-color: #F8FAFC;
+      color: #0F172A;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-card {
+      animation: fadeSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .drawer-panel {
+      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-panel {
+      transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-emerald-100 selection:text-emerald-900 pb-24">
+
+  <!-- Top Showroom Announcement Strip -->
+  <div class="bg-slate-900 text-slate-200 text-xs py-2 px-4 text-center tracking-wide border-b border-slate-800">
+    <span class="inline-flex items-center gap-1.5 font-medium">
+      <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+      Instant WhatsApp Ordering • Same-Day Showroom Dispatch • GST Invoice &amp; Brand Warranty
+    </span>
+  </div>
+
+  <!-- Sticky Header & Branding -->
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-xl border-b border-slate-200/80 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20 gap-3">
+        <!-- Brand Identity -->
+        <a href="#" class="flex items-center gap-3 group focus:outline-none">
+          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform">
+            <i data-lucide="armchair" class="w-5 h-5 text-emerald-400"></i>
+          </div>
+          <div>
+            <h1 class="text-base sm:text-xl font-extrabold tracking-tight text-slate-900 leading-none">
+              ARYX RETAIL STUDIO
+            </h1>
+            <p class="text-[11px] sm:text-xs font-semibold text-emerald-700 tracking-wider uppercase mt-1 flex items-center gap-1.5">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              Live Digital Showroom Demo
+            </p>
+          </div>
+        </a>
+
+        <!-- Header Actions -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <a
+            href="https://wa.me/919372503446?text=Hello%20ARYX%20RETAIL%20STUDIO%2C%20I%20would%20like%20to%20inquire%20about%20your%20showroom%20catalogue."
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200/80 transition-colors"
+          >
+            <i data-lucide="message-circle" class="w-4 h-4 text-emerald-600"></i>
+            <span>Showroom Concierge</span>
+          </a>
+
+          <button
+            id="headerCartBtn"
+            type="button"
+            onclick="openCartDrawer()"
+            aria-label="Open shopping cart"
+            class="relative inline-flex items-center gap-2 px-3.5 sm:px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-semibold shadow-sm transition-all active:scale-95"
+          >
+            <i data-lucide="shopping-bag" class="w-4 h-4 text-emerald-400"></i>
+            <span class="hidden xs:inline">Inquiry Bag</span>
+            <span
+              id="headerCartCount"
+              class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-emerald-500 text-white text-[11px] font-bold"
+            >0</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Category Filter Pills & Search Bar -->
+      <div class="pb-3.5 pt-1 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <nav aria-label="Product categories" class="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+          <button
+            type="button"
+            data-category="all"
+            onclick="setCategory('all')"
+            class="category-pill shrink-0 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all bg-slate-900 text-white shadow-sm"
+          >
+            All Items
+          </button>
+          <button
+            type="button"
+            data-category="furniture"
+            onclick="setCategory('furniture')"
+            class="category-pill shrink-0 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all bg-slate-100 text-slate-700 hover:bg-slate-200"
+          >
+            🛋️ Furniture
+          </button>
+          <button
+            type="button"
+            data-category="electronics"
+            onclick="setCategory('electronics')"
+            class="category-pill shrink-0 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all bg-slate-100 text-slate-700 hover:bg-slate-200"
+          >
+            📺 Electronics
+          </button>
+          <button
+            type="button"
+            data-category="home-office"
+            onclick="setCategory('home-office')"
+            class="category-pill shrink-0 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all bg-slate-100 text-slate-700 hover:bg-slate-200"
+          >
+            🏠 Home &amp; Office
+          </button>
+        </nav>
+
+        <!-- Search Input -->
+        <div class="relative w-full sm:w-64">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+          <input
+            id="searchInput"
+            type="search"
+            placeholder="Search sofa, QLED TV, desk..."
+            oninput="handleSearch(this.value)"
+            aria-label="Search showroom products"
+            class="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-100/90 border border-slate-200/80 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+          />
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Showroom Banner -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-950 text-white">
+    <div class="absolute inset-0 opacity-15 pointer-events-none" style="background-image: radial-gradient(#10b981 1px, transparent 1px); background-size: 24px 24px;"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 relative z-10">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-xs font-semibold mb-3">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+            <span>Curated 2026 Retail Collection</span>
+          </div>
+          <h2 class="font-serif text-2xl sm:text-4xl font-bold tracking-tight text-white leading-tight">
+            Elevated Living &amp; Smart Appliances, Ordered in One Tap.
+          </h2>
+          <p class="mt-2.5 text-sm sm:text-base text-slate-300 leading-relaxed">
+            Explore handcrafted teak furniture and flagship 4K electronics. Build your inquiry list and send an itemized order directly to our showroom desk on WhatsApp.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2.5 sm:gap-4 shrink-0">
+          <div class="rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 p-3 sm:p-4 text-center">
+            <p class="text-lg sm:text-2xl font-extrabold text-emerald-400">8+</p>
+            <p class="text-[11px] sm:text-xs text-slate-300 font-medium mt-0.5">Curated SKUs</p>
+          </div>
+          <div class="rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 p-3 sm:p-4 text-center">
+            <p class="text-lg sm:text-2xl font-extrabold text-white">100%</p>
+            <p class="text-[11px] sm:text-xs text-slate-300 font-medium mt-0.5">Brand Warranty</p>
+          </div>
+          <div class="rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 p-3 sm:p-4 text-center">
+            <p class="text-lg sm:text-2xl font-extrabold text-emerald-400">24h</p>
+            <p class="text-[11px] sm:text-xs text-slate-300 font-medium mt-0.5">Store Dispatch</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Product Catalogue -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+    <!-- Section Status Header -->
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h3 id="catalogueHeading" class="text-lg sm:text-xl font-bold text-slate-900">
+          All Showroom Products
+        </h3>
+        <p id="catalogueSubheading" class="text-xs sm:text-sm text-slate-500 mt-0.5">
+          Showing 8 signature furniture &amp; electronics pieces
+        </p>
+      </div>
+      <div class="hidden sm:flex items-center gap-2 text-xs text-slate-500 bg-white px-3 py-1.5 rounded-lg border border-slate-200">
+        <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
+        <span>Verified Showroom Pricing (Incl. GST)</span>
+      </div>
+    </div>
+
+    <!-- Product Grid -->
+    <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
+      <!-- Populated by JavaScript -->
+    </div>
+
+    <!-- Empty Search State -->
+    <div id="emptyState" class="hidden text-center py-16 px-4 bg-white rounded-3xl border border-slate-200/80 shadow-sm">
+      <div class="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4">
+        <i data-lucide="search-x" class="w-7 h-7 text-slate-400"></i>
+      </div>
+      <h4 class="text-base font-bold text-slate-900">No matching products found</h4>
+      <p class="text-sm text-slate-500 mt-1 max-w-sm mx-auto">Try clearing your search term or switching back to All Items.</p>
+      <button
+        type="button"
+        onclick="resetFilters()"
+        class="mt-4 px-5 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition-colors"
+      >
+        Reset Filters
+      </button>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-300 border-t border-slate-800 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+      <div>
+        <p class="text-sm font-bold text-white tracking-wide">ARYX RETAIL STUDIO</p>
+        <p class="text-xs text-slate-400 mt-0.5">Furniture &amp; Electronics Digital Showroom Demo</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <a
+          href="https://wa.me/919372503446"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600/20 border border-emerald-500/30 text-emerald-300 hover:bg-emerald-600 hover:text-white text-xs font-semibold transition-all"
+        >
+          <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+          <span>Built by AryxWeb</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Bottom Cart Bar -->
+  <div
+    id="floatingCartBar"
+    class="fixed bottom-4 left-4 right-4 sm:left-1/2 sm:-translate-x-1/2 sm:max-w-xl z-40 translate-y-28 opacity-0 pointer-events-none transition-all duration-300"
+  >
+    <div class="bg-slate-900/95 backdrop-blur-xl text-white rounded-2xl p-3.5 sm:px-5 shadow-2xl border border-slate-700/80 flex items-center justify-between gap-3">
+      <button
+        type="button"
+        onclick="openCartDrawer()"
+        class="flex items-center gap-3 text-left flex-1 min-w-0 focus:outline-none"
+      >
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center shrink-0">
+          <i data-lucide="shopping-bag" class="w-5 h-5 text-emerald-400"></i>
+        </div>
+        <div class="min-w-0">
+          <p class="text-xs text-slate-300 font-medium">
+            <span id="floatingItemCount" class="font-bold text-white">0 Items</span> in Inquiry Bag
+          </p>
+          <p id="floatingCartTotal" class="text-sm sm:text-base font-extrabold text-emerald-400 truncate">
+            ₹0
+          </p>
+        </div>
+      </button>
+
+      <div class="flex items-center gap-2 shrink-0">
+        <button
+          type="button"
+          onclick="openCartDrawer()"
+          class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition-colors"
+        >
+          View Bag
+        </button>
+        <button
+          type="button"
+          onclick="openCheckoutModal()"
+          class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold shadow-emerald-glow transition-all active:scale-95 flex items-center gap-1.5"
+        >
+          <span>Checkout</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Details Modal -->
+  <div
+    id="productModalBackdrop"
+    class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalProductTitle"
+    onclick="if(event.target === this) closeProductModal()"
+  >
+    <div id="productModalContent" class="modal-panel bg-white w-full sm:max-w-2xl rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+      <!-- Populated dynamically -->
+    </div>
+  </div>
+
+  <!-- Slide-Over Cart Drawer -->
+  <div
+    id="cartDrawerBackdrop"
+    class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex justify-end"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Inquiry Bag Drawer"
+    onclick="if(event.target === this) closeCartDrawer()"
+  >
+    <aside id="cartDrawerPanel" class="drawer-panel translate-x-full w-full max-w-md bg-white h-full shadow-2xl flex flex-col">
+      <!-- Drawer Header -->
+      <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/80">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
+            <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-slate-900">Your Inquiry Bag</h3>
+            <p id="drawerCountLabel" class="text-xs text-slate-500">0 items selected</p>
+          </div>
+        </div>
+        <button
+          type="button"
+          onclick="closeCartDrawer()"
+          aria-label="Close cart drawer"
+          class="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition-colors"
+        >
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Drawer Body -->
+      <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-5 space-y-3.5">
+        <!-- Populated dynamically -->
+      </div>
+
+      <!-- Drawer Footer -->
+      <div id="cartDrawerFooter" class="border-t border-slate-200 p-5 bg-slate-50/90 space-y-4">
+        <div class="space-y-1.5 text-sm">
+          <div class="flex items-center justify-between text-slate-600">
+            <span>Subtotal</span>
+            <span id="drawerSubtotal" class="font-semibold text-slate-900">₹0</span>
+          </div>
+          <div class="flex items-center justify-between text-slate-600">
+            <span>Showroom Handling</span>
+            <span class="text-emerald-700 font-semibold">Complimentary</span>
+          </div>
+          <div class="pt-2 border-t border-slate-200 flex items-center justify-between text-base font-extrabold text-slate-900">
+            <span>Estimated Total</span>
+            <span id="drawerTotal" class="text-emerald-700">₹0</span>
+          </div>
+        </div>
+
+        <button
+          id="drawerCheckoutBtn"
+          type="button"
+          onclick="proceedToCheckout()"
+          class="w-full py-3.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold text-sm shadow-emerald-glow transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+        >
+          <span>Proceed to WhatsApp Checkout</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </aside>
+  </div>
+
+  <!-- WhatsApp Checkout Modal -->
+  <div
+    id="checkoutModalBackdrop"
+    class="fixed inset-0 z-50 hidden bg-slate-900/65 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="checkoutModalTitle"
+    onclick="if(event.target === this) closeCheckoutModal()"
+  >
+    <div class="modal-panel bg-white w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col">
+      <!-- Modal Header -->
+      <div class="px-6 py-4 bg-gradient-to-r from-slate-900 to-slate-800 text-white flex items-center justify-between">
+        <div>
+          <h3 id="checkoutModalTitle" class="text-base sm:text-lg font-bold">Complete Your WhatsApp Order</h3>
+          <p class="text-xs text-emerald-300 mt-0.5">ARYX RETAIL STUDIO • Instant Showroom Confirmation</p>
+        </div>
+        <button
+          type="button"
+          onclick="closeCheckoutModal()"
+          aria-label="Close checkout modal"
+          class="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 transition-colors"
+        >
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Checkout Form -->
+      <form id="checkoutForm" onsubmit="submitWhatsAppOrder(event)" novalidate class="p-5 sm:p-6 overflow-y-auto space-y-4">
+        <!-- Mini Order Summary -->
+        <div class="rounded-2xl bg-slate-50 border border-slate-200/80 p-3.5">
+          <div class="flex items-center justify-between text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+            <span>Order Summary</span>
+            <span id="checkoutItemCount" class="text-emerald-700">0 Items</span>
+          </div>
+          <div id="checkoutMiniList" class="space-y-1 text-xs text-slate-700 max-h-24 overflow-y-auto"></div>
+          <div class="mt-2.5 pt-2 border-t border-slate-200 flex items-center justify-between text-sm font-extrabold text-slate-900">
+            <span>Grand Total</span>
+            <span id="checkoutGrandTotal" class="text-emerald-700">₹0</span>
+          </div>
+        </div>
+
+        <!-- Customer Name -->
+        <div>
+          <label for="customerName" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+            Customer Name <span class="text-rose-500">*</span>
+          </label>
+          <input
+            id="customerName"
+            name="customerName"
+            type="text"
+            required
+            placeholder="e.g. Rohan Sharma"
+            class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+          />
+          <p id="nameError" class="hidden text-xs text-rose-600 font-medium mt-1">Please enter your full name.</p>
+        </div>
+
+        <!-- Mobile Number -->
+        <div>
+          <label for="customerPhone" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+            Mobile Number <span class="text-rose-500">*</span>
+          </label>
+          <div class="relative">
+            <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-semibold text-slate-500">+91</span>
+            <input
+              id="customerPhone"
+              name="customerPhone"
+              type="tel"
+              inputmode="numeric"
+              maxlength="10"
+              required
+              placeholder="9876543210"
+              class="w-full pl-12 pr-4 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+            />
+          </div>
+          <p id="phoneError" class="hidden text-xs text-rose-600 font-medium mt-1">Please enter a valid 10-digit mobile number.</p>
+        </div>
+
+        <!-- Delivery / Store Pickup -->
+        <div>
+          <span class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+            Fulfillment Preference
+          </span>
+          <div class="grid grid-cols-2 gap-2.5">
+            <label class="cursor-pointer">
+              <input type="radio" name="deliveryMethod" value="Home Delivery" checked class="peer sr-only" />
+              <div class="p-3 rounded-xl border border-slate-200 peer-checked:border-emerald-600 peer-checked:bg-emerald-50/70 transition-all flex items-center gap-2.5">
+                <i data-lucide="truck" class="w-4 h-4 text-emerald-700 shrink-0"></i>
+                <div>
+                  <p class="text-xs font-bold text-slate-900">Home Delivery</p>
+                  <p class="text-[11px] text-slate-500">Doorstep setup</p>
+                </div>
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="deliveryMethod" value="Store Pickup" class="peer sr-only" />
+              <div class="p-3 rounded-xl border border-slate-200 peer-checked:border-emerald-600 peer-checked:bg-emerald-50/70 transition-all flex items-center gap-2.5">
+                <i data-lucide="store" class="w-4 h-4 text-emerald-700 shrink-0"></i>
+                <div>
+                  <p class="text-xs font-bold text-slate-900">Store Pickup</p>
+                  <p class="text-[11px] text-slate-500">Ready in 2 hrs</p>
+                </div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Payment Preference -->
+        <div>
+          <span class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+            Payment Preference
+          </span>
+          <div class="grid grid-cols-2 gap-2.5">
+            <label class="cursor-pointer">
+              <input type="radio" name="paymentMethod" value="Pay at Store" checked class="peer sr-only" />
+              <div class="p-3 rounded-xl border border-slate-200 peer-checked:border-emerald-600 peer-checked:bg-emerald-50/70 transition-all flex items-center gap-2.5">
+                <i data-lucide="banknote" class="w-4 h-4 text-emerald-700 shrink-0"></i>
+                <div>
+                  <p class="text-xs font-bold text-slate-900">Pay at Store</p>
+                  <p class="text-[11px] text-slate-500">Cash / Card / EMI</p>
+                </div>
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="paymentMethod" value="UPI Advance" class="peer sr-only" />
+              <div class="p-3 rounded-xl border border-slate-200 peer-checked:border-emerald-600 peer-checked:bg-emerald-50/70 transition-all flex items-center gap-2.5">
+                <i data-lucide="smartphone" class="w-4 h-4 text-emerald-700 shrink-0"></i>
+                <div>
+                  <p class="text-xs font-bold text-slate-900">UPI Advance</p>
+                  <p class="text-[11px] text-slate-500">Priority dispatch</p>
+                </div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="w-full py-3.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm sm:text-base shadow-emerald-glow transition-all active:scale-[0.98] flex items-center justify-center gap-2 mt-2"
+        >
+          <span>📲 Send Order / Inquiry on WhatsApp</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div
+    id="toast"
+    role="status"
+    aria-live="polite"
+    class="fixed top-20 right-4 z-50 translate-x-full opacity-0 transition-all duration-300 pointer-events-none"
+  >
+    <div class="bg-slate-900 text-white text-xs sm:text-sm font-semibold px-4 py-3 rounded-xl shadow-xl border border-slate-700 flex items-center gap-2.5">
+      <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+      <span id="toastMessage">Added to inquiry bag</span>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================
+    // 1. PRODUCT CATALOGUE DATA
+    // =========================================================
+    const PRODUCTS = [
+      {
+        id: 'sofa-l-shape',
+        name: 'Premium 5-Seater L-Shape Sofa',
+        price: 28500,
+        category: 'furniture',
+        categories: ['all', 'furniture'],
+        typeLabel: 'Furniture',
+        badge: 'Bestseller • 5-Yr Warranty',
+        inStock: true,
+        image: 'https://unsplash.com/photos/Rv-UERVcVmU/download?force=true&w=900',
+        description: 'Architectural L-shaped sectional crafted with kiln-dried teak framing and stain-resistant Belgian linen upholstery.',
+        specs: [
+          { label: 'Material', value: 'Solid Teak & Belgian Linen' },
+          { label: 'Dimensions', value: '285 × 175 × 82 cm' },
+          { label: 'Seating Capacity', value: '5-Seater + Chaise' },
+          { label: 'Colour', value: 'Warm Slate Grey' },
+          { label: 'Warranty', value: '5 Years Frame' }
+        ]
+      },
+      {
+        id: 'teak-study-desk',
+        name: 'Solid Teak Study Desk',
+        price: 11500,
+        category: 'furniture',
+        categories: ['all', 'furniture', 'home-office'],
+        typeLabel: 'Furniture',
+        badge: '100% Seasoned Teak',
+        inStock: true,
+        image: 'https://unsplash.com/photos/lB9ylP8e9Sg/download?force=true&w=900',
+        description: 'Minimalist executive workstation with concealed cable channel, twin soft-close drawers, and matte oil finish.',
+        specs: [
+          { label: 'Material', value: 'Seasoned Burma Teak' },
+          { label: 'Dimensions', value: '135 × 65 × 76 cm' },
+          { label: 'Seating Capacity', value: 'Single Workstation' },
+          { label: 'Colour', value: 'Natural Honey Teak' },
+          { label: 'Warranty', value: '3 Years' }
+        ]
+      },
+      {
+        id: 'king-size-bed',
+        name: 'Luxury King Size Bed',
+        price: 24999,
+        category: 'furniture',
+        categories: ['all', 'furniture'],
+        typeLabel: 'Furniture',
+        badge: 'Hydraulic Storage',
+        inStock: true,
+        image: 'https://unsplash.com/photos/PaZxnNKvTNg/download?force=true&w=900',
+        description: 'Boutique-hotel inspired king platform bed featuring a tufted headboard and smooth hydraulic under-bed storage.',
+        specs: [
+          { label: 'Material', value: 'Sheesham Wood & Fabric' },
+          { label: 'Dimensions', value: '213 × 198 × 105 cm' },
+          { label: 'Seating Capacity', value: 'King Size (2 Adults)' },
+          { label: 'Colour', value: 'Walnut & Ivory' },
+          { label: 'Warranty', value: '5 Years Structural' }
+        ]
+      },
+      {
+        id: 'ergonomic-chair',
+        name: 'Modern Ergonomic Office Chair',
+        price: 6499,
+        category: 'furniture',
+        categories: ['all', 'furniture', 'home-office'],
+        typeLabel: 'Furniture',
+        badge: 'Dynamic Lumbar',
+        inStock: false,
+        image: 'https://unsplash.com/photos/L0vgUvFhtLc/download?force=true&w=900',
+        description: 'Breathable Korean mesh task chair with 3D adjustable armrests, synchro-tilt lock, and heavy-duty alloy base.',
+        specs: [
+          { label: 'Material', value: 'Breathable Mesh & Alloy' },
+          { label: 'Dimensions', value: '66 × 64 × 118 cm' },
+          { label: 'Seating Capacity', value: '1 Person (Up to 125 kg)' },
+          { label: 'Colour', value: 'Obsidian Black' },
+          { label: 'Warranty', value: '2 Years Mechanism' }
+        ]
+      },
+      {
+        id: 'qled-tv-55',
+        name: '55-inch 4K Smart QLED TV',
+        price: 42999,
+        category: 'electronics',
+        categories: ['all', 'electronics', 'home-office'],
+        typeLabel: 'Electronics',
+        badge: 'Dolby Vision • 120Hz',
+        inStock: true,
+        image: 'https://unsplash.com/photos/zSAZG5uQGvk/download?force=true&w=900',
+        description: 'Bezel-less Quantum Dot 4K Google TV delivering cinema-grade HDR10+,MEMC motion clarity, and hands-free voice control.',
+        specs: [
+          { label: 'Brand', value: 'Aura Vision QLED' },
+          { label: 'Screen Size', value: '55-inch (139 cm)' },
+          { label: 'Resolution', value: '4K UHD (3840 × 2160)' },
+          { label: 'Energy Rating', value: '4-Star BEE' },
+          { label: 'Warranty', value: '2 Years Comprehensive' }
+        ]
+      },
+      {
+        id: 'double-door-fridge',
+        name: 'Double Door Refrigerator',
+        price: 32500,
+        category: 'electronics',
+        categories: ['all', 'electronics', 'home-office'],
+        typeLabel: 'Electronics',
+        badge: '324L • Digital Inverter',
+        inStock: true,
+        image: 'https://unsplash.com/photos/MP0bgaS_d1c/download?force=true&w=900',
+        description: 'Convertible 5-in-1 frost-free refrigerator with twin cooling plus technology and toughened glass spill-proof shelves.',
+        specs: [
+          { label: 'Brand', value: 'Samsung Digital' },
+          { label: 'Capacity', value: '324 Litres Frost-Free' },
+          { label: 'Power', value: 'Digital Inverter (110W)' },
+          { label: 'Energy Rating', value: '3-Star BEE' },
+          { label: 'Warranty', value: '10 Years Compressor' }
+        ]
+      },
+      {
+        id: 'washing-machine',
+        name: 'Front Load Washing Machine',
+        price: 26999,
+        category: 'electronics',
+        categories: ['all', 'electronics'],
+        typeLabel: 'Electronics',
+        badge: '7.0 kg • 5-Star BEE',
+        inStock: true,
+        image: 'https://unsplash.com/photos/Ibm57lIQKdQ/download?force=true&w=900',
+        description: 'AI Direct Drive front-load washer with hygiene steam cycle, stainless steel drum, and whisper-quiet operation.',
+        specs: [
+          { label: 'Brand', value: 'LG Direct Drive' },
+          { label: 'Capacity', value: '7.0 kg Fully Automatic' },
+          { label: 'Power', value: '1200 RPM Steam Wash' },
+          { label: 'Energy Rating', value: '5-Star BEE' },
+          { label: 'Warranty', value: '10 Years Motor' }
+        ]
+      },
+      {
+        id: 'bluetooth-soundbar',
+        name: 'Premium Bluetooth Soundbar',
+        price: 7999,
+        category: 'electronics',
+        categories: ['all', 'electronics', 'home-office'],
+        typeLabel: 'Electronics',
+        badge: '240W • Wireless Sub',
+        inStock: true,
+        image: 'https://unsplash.com/photos/G8tRf8m7Bss/download?force=true&w=900',
+        description: '2.1-channel cinema soundbar with deep wireless subwoofer, HDMI eARC, optical input, and Bluetooth 5.3 streaming.',
+        specs: [
+          { label: 'Brand', value: 'JBL Studio Bar' },
+          { label: 'Capacity', value: '2.1 Ch + Wireless Sub' },
+          { label: 'Power', value: '240W RMS Dolby Audio' },
+          { label: 'Energy Rating', value: 'Eco Standby <0.5W' },
+          { label: 'Warranty', value: '1 Year Brand' }
+        ]
+      }
+    ];
+
+    // =========================================================
+    // 2. APPLICATION STATE
+    // =========================================================
+    let activeCategory = 'all';
+    let searchQuery = '';
+    let cart = []; // Array of { productId, qty }
+
+    const CATEGORY_META = {
+      'all': { title: 'All Showroom Products', sub: 'Curated furniture & electronics collection' },
+      'furniture': { title: 'Furniture Collection', sub: 'Handcrafted sofas, teak desks, beds & seating' },
+      'electronics': { title: 'Electronics & Appliances', sub: '4K QLED TVs, refrigerators, washers & audio' },
+      'home-office': { title: 'Home & Office Essentials', sub: 'Workstation & smart living upgrades' }
+    };
+
+    // =========================================================
+    // 3. UTILITIES
+    // =========================================================
+    function formatINR(amount) {
+      return '₹' + Number(amount).toLocaleString('en-IN');
+    }
+
+    function buildFallbackSvg(title, typeLabel) {
+      const safeTitle = encodeURIComponent(title);
+      const safeType = encodeURIComponent(typeLabel.toUpperCase());
+      return `data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%230F172A'/%3E%3Cstop offset='100%25' stop-color='%23064E3B'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='600' fill='url(%23g)'/%3E%3Ctext x='50%25' y='44%25' dominant-baseline='middle' text-anchor='middle' fill='%2334D399' font-family='sans-serif' font-size='22' font-weight='700' letter-spacing='4'%3E${safeType}%3C/text%3E%3Ctext x='50%25' y='53%25' dominant-baseline='middle' text-anchor='middle' fill='%23FFFFFF' font-family='sans-serif' font-size='28' font-weight='700'%3E${safeTitle}%3C/text%3E%3Ctext x='50%25' y='62%25' dominant-baseline='middle' text-anchor='middle' fill='%2394A3B8' font-family='sans-serif' font-size='16'%3EARYX RETAIL STUDIO%3C/text%3E%3C/svg%3E`;
+    }
+
+    let toastTimer = null;
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMessage');
+      toastMsg.textContent = message;
+      toast.classList.remove('translate-x-full', 'opacity-0');
+      toast.classList.add('translate-x-0', 'opacity-100');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('translate-x-full', 'opacity-0');
+        toast.classList.remove('translate-x-0', 'opacity-100');
+      }, 2400);
+    }
+
+    // =========================================================
+    // 4. FILTERING & PRODUCT GRID RENDERING
+    // =========================================================
+    function setCategory(cat) {
+      activeCategory = cat;
+      document.querySelectorAll('.category-pill').forEach(btn => {
+        const isActive = btn.dataset.category === cat;
+        btn.className = isActive
+          ? 'category-pill shrink-0 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all bg-slate-900 text-white shadow-sm'
+          : 'category-pill shrink-0 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all bg-slate-100 text-slate-700 hover:bg-slate-200';
+      });
+      renderProducts();
+    }
+
+    function handleSearch(val) {
+      searchQuery = val.trim().toLowerCase();
+      renderProducts();
+    }
+
+    function resetFilters() {
+      searchQuery = '';
+      document.getElementById('searchInput').value = '';
+      setCategory('all');
+    }
+
+    function renderProducts() {
+      const grid = document.getElementById('productGrid');
+      const emptyState = document.getElementById('emptyState');
+      const heading = document.getElementById('catalogueHeading');
+      const subheading = document.getElementById('catalogueSubheading');
+
+      const filtered = PRODUCTS.filter(p => {
+        const matchesCat = p.categories.includes(activeCategory);
+        const matchesSearch = !searchQuery ||
+          p.name.toLowerCase().includes(searchQuery) ||
+          p.description.toLowerCase().includes(searchQuery) ||
+          p.specs.some(s => s.value.toLowerCase().includes(searchQuery));
+        return matchesCat && matchesSearch;
+      });
+
+      const meta = CATEGORY_META[activeCategory] || CATEGORY_META.all;
+      heading.textContent = meta.title;
+      subheading.textContent = `Showing ${filtered.length} ${filtered.length === 1 ? 'item' : 'items'} — ${meta.sub}`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        lucide.createIcons();
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      grid.innerHTML = filtered.map((product, index) => {
+        const inCart = cart.find(item => item.productId === product.id);
+        const fallback = buildFallbackSvg(product.name, product.typeLabel);
+        const topSpecs = product.specs.slice(0, 3);
+
+        return `
+          <article
+            class="animate-card group bg-white rounded-3xl border border-slate-200/80 shadow-luxury hover:shadow-luxury-hover transition-all duration-300 flex flex-col overflow-hidden"
+            style="animation-delay: ${index * 45}ms"
+          >
+            <!-- Product Image -->
+            <div class="relative aspect-[4/3] bg-slate-100 overflow-hidden cursor-pointer" onclick="openProductModal('${product.id}')">
+              <img
+                src="${product.image}"
+                alt="${product.name}"
+                loading="lazy"
+                onerror="this.onerror=null; this.src='${fallback}';"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${!product.inStock ? 'grayscale-[40%] opacity-85' : ''}"
+              />
+              <!-- Top Badges -->
+              <div class="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
+                <span class="px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-md text-slate-800 text-[11px] font-bold shadow-sm">
+                  ${product.badge}
+                </span>
+                ${
+                  product.inStock
+                    ? `<span class="px-2.5 py-1 rounded-full bg-emerald-600 text-white text-[11px] font-bold shadow-sm flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-200"></span> In Stock
+                      </span>`
+                    : `<span class="px-2.5 py-1 rounded-full bg-rose-600 text-white text-[11px] font-bold shadow-sm">
+                        Out of Stock
+                      </span>`
+                }
+              </div>
+              <!-- Quick View Overlay -->
+              <button
+                type="button"
+                onclick="event.stopPropagation(); openProductModal('${product.id}')"
+                aria-label="View specifications for ${product.name}"
+                class="absolute bottom-3 right-3 px-3 py-1.5 rounded-xl bg-slate-900/80 hover:bg-slate-900 text-white text-[11px] font-semibold backdrop-blur-md flex items-center gap-1.5 opacity-95 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
+              >
+                <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 text-emerald-400"></i>
+                <span>View Specs</span>
+              </button>
+            </div>
+
+            <!-- Product Body -->
+            <div class="p-5 flex-1 flex flex-col">
+              <div class="flex items-start justify-between gap-2">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700">${product.typeLabel}</span>
+                <span class="text-lg font-extrabold text-slate-900">${formatINR(product.price)}</span>
+              </div>
+
+              <h4
+                onclick="openProductModal('${product.id}')"
+                class="mt-1 text-base font-bold text-slate-900 group-hover:text-emerald-700 transition-colors cursor-pointer leading-snug"
+              >
+                ${product.name}
+              </h4>
+
+              <p class="mt-1.5 text-xs text-slate-500 leading-relaxed line-clamp-2">
+                ${product.description}
+              </p>
+
+              <!-- Key Specifications Preview -->
+              <div class="mt-4 pt-3.5 border-t border-slate-100 space-y-1.5 text-xs">
+                ${topSpecs.map(spec => `
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="text-slate-400 font-medium">${spec.label}</span>
+                    <span class="text-slate-700 font-semibold text-right truncate">${spec.value}</span>
+                  </div>
+                `).join('')}
+              </div>
+
+              <!-- Action Row -->
+              <div class="mt-5 pt-2 flex items-center gap-2">
+                ${
+                  product.inStock
+                    ? `<button
+                        type="button"
+                        onclick="addToCart('${product.id}')"
+                        class="flex-1 py-2.5 px-4 rounded-xl ${inCart ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-slate-900 hover:bg-slate-800'} text-white text-xs font-bold transition-all active:scale-95 flex items-center justify-center gap-2 shadow-sm"
+                      >
+                        <i data-lucide="${inCart ? 'check' : 'plus-circle'}" class="w-4 h-4 ${inCart ? 'text-white' : 'text-emerald-400'}"></i>
+                        <span>${inCart ? `In Bag (${inCart.qty}) • Add More` : 'Add to Inquiry / Order'}</span>
+                      </button>`
+                    : `<button
+                        type="button"
+                        disabled
+                        aria-disabled="true"
+                        class="flex-1 py-2.5 px-4 rounded-xl bg-slate-100 text-slate-400 text-xs font-bold cursor-not-allowed flex items-center justify-center gap-2 border border-slate-200"
+                      >
+                        <i data-lucide="ban" class="w-4 h-4"></i>
+                        <span>Currently Unavailable</span>
+                      </button>`
+                }
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    // =========================================================
+    // 5. PRODUCT DETAILS MODAL
+    // =========================================================
+    function openProductModal(productId) {
+      const product = PRODUCTS.find(p => p.id === productId);
+      if (!product) return;
+
+      const fallback = buildFallbackSvg(product.name, product.typeLabel);
+      const container = document.getElementById('productModalContent');
+      const inCart = cart.find(i => i.productId === product.id);
+
+      container.innerHTML = `
+        <div class="relative h-56 sm:h-72 bg-slate-100 shrink-0">
+          <img
+            src="${product.image}"
+            alt="${product.name}"
+            onerror="this.onerror=null; this.src='${fallback}';"
+            class="w-full h-full object-cover"
+          />
+          <button
+            type="button"
+            onclick="closeProductModal()"
+            aria-label="Close product details"
+            class="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-900/75 hover:bg-slate-900 text-white flex items-center justify-center backdrop-blur-md transition-colors"
+          >
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+          <div class="absolute bottom-3 left-4 flex items-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-white/95 text-slate-900 text-xs font-bold shadow">${product.badge}</span>
+            ${
+              product.inStock
+                ? `<span class="px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-bold shadow">In Stock</span>`
+                : `<span class="px-3 py-1 rounded-full bg-rose-600 text-white text-xs font-bold shadow">Out of Stock</span>`
+            }
+          </div>
+        </div>
+
+        <div class="p-5 sm:p-6 overflow-y-auto space-y-5">
+          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-emerald-700">${product.typeLabel}</span>
+              <h3 id="modalProductTitle" class="text-xl font-extrabold text-slate-900 mt-0.5">${product.name}</h3>
+            </div>
+            <p class="text-2xl font-extrabold text-slate-900 shrink-0">${formatINR(product.price)}</p>
+          </div>
+
+          <p class="text-sm text-slate-600 leading-relaxed">${product.description}</p>
+
+          <div>
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2.5">Complete Specifications</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              ${product.specs.map(spec => `
+                <div class="rounded-xl bg-slate-50 border border-slate-200/80 px-3.5 py-2.5">
+                  <p class="text-[11px] font-semibold text-slate-400 uppercase">${spec.label}</p>
+                  <p class="text-xs sm:text-sm font-bold text-slate-800 mt-0.5">${spec.value}</p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 sm:px-6 border-t border-slate-200 bg-slate-50 flex items-center gap-3">
+          ${
+            product.inStock
+              ? `<button
+                  type="button"
+                  onclick="addToCart('${product.id}'); closeProductModal();"
+                  class="flex-1 py-3 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-emerald-glow transition-all active:scale-95 flex items-center justify-center gap-2"
+                >
+                  <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                  <span>${inCart ? `Add Another (${inCart.qty} in Bag)` : 'Add to Inquiry / Order'}</span>
+                </button>`
+              : `<button
+                  type="button"
+                  disabled
+                  class="flex-1 py-3 px-5 rounded-xl bg-slate-200 text-slate-500 text-sm font-bold cursor-not-allowed"
+                >
+                  Out of Stock — Cannot Be Added
+                </button>`
+          }
+        </div>
+      `;
+
+      document.getElementById('productModalBackdrop').classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+      lucide.createIcons();
+    }
+
+    function closeProductModal() {
+      document.getElementById('productModalBackdrop').classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    // =========================================================
+    // 6. SHOPPING CART LOGIC
+    // =========================================================
+    function addToCart(productId) {
+      const product = PRODUCTS.find(p => p.id === productId);
+      if (!product) return;
+
+      // Guard against adding unavailable products
+      if (!product.inStock) {
+        showToast('This item is currently out of stock.');
+        return;
+      }
+
+      const existing = cart.find(item => item.productId === productId);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ productId, qty: 1 });
+      }
+
+      updateCartUI();
+      renderProducts();
+      showToast(`Added "${product.name}" to inquiry bag`);
+    }
+
+    function updateQty(productId, delta) {
+      const idx = cart.findIndex(item => item.productId === productId);
+      if (idx === -1) return;
+
+      cart[idx].qty += delta;
+      if (cart[idx].qty <= 0) {
+        cart.splice(idx, 1);
+      }
+
+      updateCartUI();
+      renderProducts();
+    }
+
+    function removeFromCart(productId) {
+      cart = cart.filter(item => item.productId !== productId);
+      updateCartUI();
+      renderProducts();
+    }
+
+    function getCartTotals() {
+      let count = 0;
+      let subtotal = 0;
+      const detailedItems = cart.map(entry => {
+        const product = PRODUCTS.find(p => p.id === entry.productId);
+        const lineTotal = product.price * entry.qty;
+        count += entry.qty;
+        subtotal += lineTotal;
+        return { product, qty: entry.qty, lineTotal };
+      });
+      return { count, subtotal, total: subtotal, detailedItems };
+    }
+
+    function updateCartUI() {
+      const { count, subtotal, total, detailedItems } = getCartTotals();
+
+      // Header badge
+      document.getElementById('headerCartCount').textContent = count;
+
+      // Floating bottom bar
+      const floatingBar = document.getElementById('floatingCartBar');
+      document.getElementById('floatingItemCount').textContent = `${count} ${count === 1 ? 'Item' : 'Items'}`;
+      document.getElementById('floatingCartTotal').textContent = formatINR(total);
+
+      if (count > 0) {
+        floatingBar.classList.remove('translate-y-28', 'opacity-0', 'pointer-events-none');
+        floatingBar.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+      } else {
+        floatingBar.classList.add('translate-y-28', 'opacity-0', 'pointer-events-none');
+        floatingBar.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+      }
+
+      // Cart Drawer
+      document.getElementById('drawerCountLabel').textContent = `${count} ${count === 1 ? 'item' : 'items'} selected`;
+      document.getElementById('drawerSubtotal').textContent = formatINR(subtotal);
+      document.getElementById('drawerTotal').textContent = formatINR(total);
+      document.getElementById('drawerCheckoutBtn').disabled = count === 0;
+
+      const itemsContainer = document.getElementById('cartItemsContainer');
+      if (detailedItems.length === 0) {
+        itemsContainer.innerHTML = `
+          <div class="h-full flex flex-col items-center justify-center text-center py-12 px-4">
+            <div class="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mb-4">
+              <i data-lucide="shopping-bag" class="w-8 h-8 text-slate-300"></i>
+            </div>
+            <h4 class="text-sm font-bold text-slate-900">Your inquiry bag is empty</h4>
+            <p class="text-xs text-slate-500 mt-1 max-w-xs">Select furniture or electronics from the showroom to build your WhatsApp order.</p>
+          </div>
+        `;
+      } else {
+        itemsContainer.innerHTML = detailedItems.map(({ product, qty, lineTotal }) => {
+          const fallback = buildFallbackSvg(product.name, product.typeLabel);
+          return `
+            <div class="flex gap-3.5 p-3 rounded-2xl border border-slate-200/80 bg-white shadow-sm">
+              <img
+                src="${product.image}"
+                alt="${product.name}"
+                onerror="this.onerror=null; this.src='${fallback}';"
+                class="w-20 h-20 rounded-xl object-cover bg-slate-100 shrink-0"
+              />
+              <div class="flex-1 min-w-0 flex flex-col justify-between">
+                <div class="flex items-start justify-between gap-2">
+                  <div class="min-w-0">
+                    <h4 class="text-xs sm:text-sm font-bold text-slate-900 truncate">${product.name}</h4>
+                    <p class="text-[11px] text-slate-500 mt-0.5">${formatINR(product.price)} each</p>
+                  </div>
+                  <button
+                    type="button"
+                    onclick="removeFromCart('${product.id}')"
+                    aria-label="Remove ${product.name}"
+                    class="text-slate-400 hover:text-rose-600 p-1 rounded-lg transition-colors"
+                  >
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                  </button>
+                </div>
+
+                <div class="flex items-center justify-between mt-2">
+                  <div class="inline-flex items-center rounded-lg border border-slate-200 bg-slate-50">
+                    <button
+                      type="button"
+                      onclick="updateQty('${product.id}', -1)"
+                      aria-label="Decrease quantity"
+                      class="w-7 h-7 flex items-center justify-center text-slate-600 hover:text-slate-900 font-bold"
+                    >−</button>
+                    <span class="w-7 text-center text-xs font-bold text-slate-900">${qty}</span>
+                    <button
+                      type="button"
+                      onclick="updateQty('${product.id}', 1)"
+                      aria-label="Increase quantity"
+                      class="w-7 h-7 flex items-center justify-center text-slate-600 hover:text-slate-900 font-bold"
+                    >+</button>
+                  </div>
+                  <span class="text-xs sm:text-sm font-extrabold text-emerald-700">${formatINR(lineTotal)}</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      lucide.createIcons();
+    }
+
+    // =========================================================
+    // 7. CART DRAWER & CHECKOUT MODAL CONTROLS
+    // =========================================================
+    function openCartDrawer() {
+      const backdrop = document.getElementById('cartDrawerBackdrop');
+      const panel = document.getElementById('cartDrawerPanel');
+      backdrop.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+      requestAnimationFrame(() => {
+        panel.classList.remove('translate-x-full');
+      });
+    }
+
+    function closeCartDrawer() {
+      const backdrop = document.getElementById('cartDrawerBackdrop');
+      const panel = document.getElementById('cartDrawerPanel');
+      panel.classList.add('translate-x-full');
+      setTimeout(() => {
+        backdrop.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+      }, 300);
+    }
+
+    function proceedToCheckout() {
+      closeCartDrawer();
+      setTimeout(openCheckoutModal, 220);
+    }
+
+    function openCheckoutModal() {
+      const { count, total, detailedItems } = getCartTotals();
+      if (count === 0) {
+        showToast('Please add at least one product first.');
+        return;
+      }
+
+      document.getElementById('checkoutItemCount').textContent = `${count} ${count === 1 ? 'Item' : 'Items'}`;
+      document.getElementById('checkoutGrandTotal').textContent = formatINR(total);
+      document.getElementById('checkoutMiniList').innerHTML = detailedItems.map(({ product, qty, lineTotal }) => `
+        <div class="flex items-center justify-between gap-2">
+          <span class="truncate">${qty} × ${product.name}</span>
+          <span class="font-bold text-slate-900 shrink-0">${formatINR(lineTotal)}</span>
+        </div>
+      `).join('');
+
+      document.getElementById('nameError').classList.add('hidden');
+      document.getElementById('phoneError').classList.add('hidden');
+      document.getElementById('checkoutModalBackdrop').classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+      lucide.createIcons();
+    }
+
+    function closeCheckoutModal() {
+      document.getElementById('checkoutModalBackdrop').classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    // =========================================================
+    // 8. WHATSAPP CHECKOUT & VALIDATION
+    // =========================================================
+    function submitWhatsAppOrder(event) {
+      event.preventDefault();
+
+      const nameInput = document.getElementById('customerName');
+      const phoneInput = document.getElementById('customerPhone');
+      const nameError = document.getElementById('nameError');
+      const phoneError = document.getElementById('phoneError');
+
+      const customerName = nameInput.value.trim();
+      const rawPhone = phoneInput.value.replace(/\D/g, '');
+      const deliveryMethod = document.querySelector('input[name="deliveryMethod"]:checked').value;
+      const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+      let isValid = true;
+
+      if (customerName.length < 2) {
+        nameError.classList.remove('hidden');
+        nameInput.focus();
+        isValid = false;
+      } else {
+        nameError.classList.add('hidden');
+      }
+
+      if (!/^[6-9]\d{9}$/.test(rawPhone) && rawPhone.length !== 10) {
+        phoneError.classList.remove('hidden');
+        if (isValid) phoneInput.focus();
+        isValid = false;
+      } else {
+        phoneError.classList.add('hidden');
+      }
+
+      if (!isValid) return;
+
+      const { subtotal, total, detailedItems } = getCartTotals();
+
+      const itemLines = detailedItems.map(({ product, qty, lineTotal }, idx) => {
+        const keySpecs = product.specs.slice(0, 3).map(s => `${s.label}: ${s.value}`).join(' | ');
+        return (
+          `${idx + 1}. *${product.name}*\n` +
+          `   Specs: ${keySpecs}\n` +
+          `   Qty: ${qty} × ${formatINR(product.price)} = *${formatINR(lineTotal)}*`
+        );
+      }).join('\n\n');
+
+      const message =
+        `*ARYX RETAIL STUDIO — Digital Showroom Inquiry*\n` +
+        `----------------------------------------\n` +
+        `*Customer:* ${customerName}\n` +
+        `*Mobile:* +91 ${rawPhone}\n` +
+        `*Fulfillment:* ${deliveryMethod}\n` +
+        `*Payment Preference:* ${paymentMethod}\n` +
+        `----------------------------------------\n` +
+        `*ORDER ITEMS:*\n\n` +
+        `${itemLines}\n` +
+        `----------------------------------------\n` +
+        `*Subtotal:* ${formatINR(subtotal)}\n` +
+        `*Grand Total:* *${formatINR(total)}*\n` +
+        `----------------------------------------\n` +
+        `Please confirm availability and next steps.`;
+
+      const whatsappUrl = `https://wa.me/919372503446?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+      closeCheckoutModal();
+      showToast('Opening WhatsApp with your itemized order...');
+    }
+
+    // Close modals/drawers on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeProductModal();
+        closeCartDrawer();
+        closeCheckoutModal();
+      }
+    });
+
+    // Initialize showroom
+    renderProducts();
+    updateCartUI();
+  </script>
+</body>
+</html>
