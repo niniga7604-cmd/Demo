@@ -1,0 +1,2269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ARYXWEB — Studio &amp; Event Hall Booking System</title>
+  <meta name="description" content="Book dance studios, rehearsal halls, photoshoot floors, and private event spaces with live hourly slot availability, instant online token advance, and automated digital passes.">
+  <meta name="theme-color" content="#0B0F19">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ARYXWEB">
+  <meta property="og:title" content="ARYXWEB — Studio &amp; Event Hall Booking System">
+  <meta property="og:description" content="Live hourly slot availability, instant online token advance, and automated digital booking passes for dance studios, rehearsal halls, shoots, and private events.">
+  <meta property="og:locale" content="en_IN">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Montserrat:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================================================
+       DESIGN TOKENS — ARYXWEB EMERALD & GOLD PALETTE
+       ========================================================= */
+    :root {
+      --bg: #0B0F19;
+      --bg-alt: #0F1524;
+      --card: #131A2B;
+
+      --primary: #10B981;
+      --primary-hover: #059669;
+
+      --accent: #F59E0B;
+      --accent-hover: #D97706;
+
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+
+      --border: rgba(255,255,255,0.09);
+
+      /* Derived semantic tokens */
+      --card-elev: #192238;
+      --line: var(--border);
+      --line-strong: rgba(245, 158, 11, 0.45);
+      --emerald-line: rgba(16, 185, 129, 0.42);
+      --amber: #F59E0B;
+      --error: #EF4444;
+
+      --font-display: "Cormorant Garamond", Georgia, serif;
+      --font-head: "Poppins", system-ui, -apple-system, sans-serif;
+      --font-body: "Montserrat", system-ui, -apple-system, sans-serif;
+
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --nav-h: 72px;
+      --shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+      --ease: cubic-bezier(.2, .7, .2, 1);
+    }
+
+    /* =========================================================
+       BASE & RESET
+       ========================================================= */
+    *, *::before, *::after { box-sizing: border-box; }
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: calc(var(--nav-h) + 12px);
+      -webkit-text-size-adjust: 100%;
+      background: var(--bg);
+    }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(900px 500px at 85% -5%, rgba(16, 185, 129, 0.09), transparent 60%),
+        radial-gradient(800px 500px at 10% 25%, rgba(245, 158, 11, 0.08), transparent 60%),
+        var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.98rem;
+      line-height: 1.6;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+    img, svg { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.22; margin: 0; }
+    p { margin: 0; }
+    ul { margin: 0; padding: 0; list-style: none; }
+    button, input, select { font-family: inherit; }
+    :focus-visible { outline: 2.5px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+
+    .container { width: min(1140px, 100% - 32px); margin-inline: auto; }
+    .section { padding: 68px 0; position: relative; }
+    .section--alt { background: var(--bg-alt); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .section__head { text-align: center; max-width: 720px; margin: 0 auto 38px; }
+    .section__kicker {
+      display: inline-block;
+      font-family: var(--font-head);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .section__head h2 { font-size: clamp(1.65rem, 4.4vw, 2.45rem); font-weight: 700; letter-spacing: -0.01em; color: var(--text); }
+    .section__head p { color: var(--text-muted); margin-top: 10px; font-size: 0.95rem; }
+    .gold-rule { width: 72px; height: 3px; border-radius: 3px; background: linear-gradient(90deg, var(--primary), var(--accent)); margin: 16px auto 0; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+    /* =========================================================
+       BUTTONS
+       ========================================================= */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+      min-height: 48px; padding: 12px 24px;
+      font-family: var(--font-head); font-weight: 600; font-size: 0.94rem;
+      border: 1.5px solid transparent; border-radius: 999px; cursor: pointer;
+      transition: transform .22s var(--ease), box-shadow .22s var(--ease), background .22s, border-color .22s;
+      text-align: center; -webkit-tap-highlight-color: transparent;
+    }
+    .btn:active { transform: scale(.97); }
+    .btn--emerald {
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+      color: #042419;
+      font-weight: 700;
+      box-shadow: 0 10px 26px rgba(16, 185, 129, 0.25);
+    }
+    .btn--emerald:hover { transform: translateY(-2px); background: linear-gradient(135deg, #34D399, var(--primary)); box-shadow: 0 14px 32px rgba(16, 185, 129, 0.36); }
+    .btn--gold {
+      background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+      color: #140D02;
+      font-weight: 700;
+      box-shadow: 0 10px 26px rgba(245, 158, 11, 0.24);
+    }
+    .btn--gold:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(245, 158, 11, 0.36); }
+    .btn--ghost {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--accent);
+      border-color: var(--line-strong);
+    }
+    .btn--ghost:hover { background: rgba(245, 158, 11, 0.12); border-color: var(--accent); transform: translateY(-2px); }
+    .btn[disabled] { opacity: 0.55; cursor: not-allowed; transform: none !important; }
+    .btn[hidden] { display: none; }
+
+    /* =========================================================
+       LOGO CREST
+       ========================================================= */
+    .crest-wrap {
+      width: 48px; height: 48px; flex: none; position: relative;
+      display: grid; place-items: center; border-radius: 50%;
+    }
+    .crest-wrap svg { width: 100%; height: 100%; border-radius: 50%; }
+    .crest-wrap--lg { width: 88px; height: 88px; }
+
+    /* =========================================================
+       NAVIGATION
+       ========================================================= */
+    .nav {
+      position: fixed; inset: 0 0 auto 0; z-index: 100; height: var(--nav-h);
+      background: rgba(11, 15, 25, 0.88);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav__inner { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+    .brand__txt { line-height: 1.1; }
+    .brand__name {
+      display: block; font-family: var(--font-head); font-weight: 700;
+      font-size: 1.05rem; letter-spacing: 0.14em;
+      background: linear-gradient(135deg, #F8FAFC, var(--accent));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .brand__sub {
+      display: block; font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.14em; color: var(--primary); text-transform: uppercase; margin-top: 2px;
+    }
+    .nav__links { display: none; align-items: center; gap: 22px; font-size: 0.9rem; font-weight: 500; }
+    .nav__links a:not(.btn) { color: var(--text-muted); transition: color .2s; padding: 6px 0; }
+    .nav__links a:not(.btn):hover, .nav__links a.is-active { color: var(--accent); }
+    .nav__actions { display: flex; align-items: center; gap: 8px; flex: none; }
+    .mb-btn {
+      display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 6px 14px;
+      border-radius: 999px; border: 1px solid var(--line-strong); background: rgba(245, 158, 11, 0.1);
+      color: var(--accent); font-family: var(--font-head); font-weight: 600; font-size: 0.8rem;
+      cursor: pointer; white-space: nowrap; transition: background .2s, border-color .2s;
+    }
+    .mb-btn:hover { background: rgba(245, 158, 11, 0.2); border-color: var(--accent); }
+    .nav__toggle {
+      width: 42px; height: 42px; border-radius: 11px; background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border); cursor: pointer; position: relative; color: var(--accent);
+    }
+    .nav__toggle span, .nav__toggle span::before, .nav__toggle span::after {
+      content: ""; position: absolute; left: 11px; width: 18px; height: 2px; background: currentColor; border-radius: 2px;
+      transition: transform .28s var(--ease), opacity .2s, top .28s var(--ease);
+    }
+    .nav__toggle span { top: 20px; }
+    .nav__toggle span::before { top: -6px; left: 0; }
+    .nav__toggle span::after { top: 6px; left: 0; }
+    .nav__toggle[aria-expanded="true"] span { background: transparent; }
+    .nav__toggle[aria-expanded="true"] span::before { top: 0; transform: rotate(45deg); }
+    .nav__toggle[aria-expanded="true"] span::after { top: 0; transform: rotate(-45deg); }
+
+    .nav__drawer {
+      position: absolute; top: var(--nav-h); left: 0; right: 0;
+      background: rgba(15, 21, 36, 0.98); border-bottom: 1px solid var(--border);
+      padding: 8px 20px 20px; display: flex; flex-direction: column; gap: 4px;
+      max-height: 0; overflow: hidden; visibility: hidden; opacity: 0;
+      transition: max-height .35s var(--ease), opacity .25s, visibility .25s;
+    }
+    .nav__drawer.is-open { max-height: 420px; visibility: visible; opacity: 1; }
+    .nav__drawer a:not(.btn), .nav__drawer button.nav__mb {
+      padding: 13px 4px; border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--text-muted); font-size: 0.96rem; font-weight: 500;
+      background: none; border-left: 0; border-right: 0; border-top: 0; text-align: left; cursor: pointer;
+    }
+    .nav__drawer .btn { margin-top: 12px; width: 100%; }
+
+    @media (min-width: 900px) {
+      .nav__toggle, .nav__drawer { display: none; }
+      .nav__links { display: flex; }
+    }
+    @media (max-width: 440px) {
+      .mb-btn__label { display: none; }
+      .brand__name { font-size: 0.9rem; letter-spacing: 0.1em; }
+    }
+
+    /* =========================================================
+       HERO SECTION
+       ========================================================= */
+    .hero {
+      position: relative;
+      padding: calc(var(--nav-h) + 44px) 0 56px;
+      overflow: hidden;
+      background:
+        radial-gradient(780px 440px at 82% 14%, rgba(16, 185, 129, 0.16), transparent 65%),
+        radial-gradient(720px 440px at 14% 84%, rgba(245, 158, 11, 0.14), transparent 65%),
+        linear-gradient(180deg, var(--bg) 0%, #0E1628 55%, var(--bg) 100%);
+    }
+    .hero__grid {
+      display: grid; gap: 32px; align-items: center;
+    }
+    @media (min-width: 880px) {
+      .hero__grid { grid-template-columns: 1.15fr 0.85fr; gap: 44px; }
+    }
+    .hero__badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 7px 14px; border-radius: 999px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid var(--emerald-line);
+      color: var(--primary); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-family: var(--font-head);
+      font-size: clamp(2.2rem, 6vw, 3.65rem);
+      font-weight: 800; line-height: 1.08; letter-spacing: -0.02em;
+      background: linear-gradient(180deg, #F8FAFC 20%, #E2E8F0 75%, var(--accent) 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      margin-bottom: 16px;
+    }
+    .hero__desc { color: var(--text-muted); font-size: clamp(0.96rem, 2.5vw, 1.08rem); max-width: 560px; margin-bottom: 22px; }
+    .hero__highlights {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 26px;
+    }
+    .hero__pill {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 8px 14px; border-radius: 999px;
+      background: rgba(19, 26, 43, 0.92); border: 1px solid var(--border);
+      font-size: 0.84rem; color: var(--text); font-weight: 500;
+    }
+    .hero__pill b { color: var(--accent); }
+    .hero__ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+    @media (max-width: 520px) { .hero__ctas .btn { width: 100%; } }
+
+    .hero__card {
+      background:
+        radial-gradient(280px 180px at 50% 0%, rgba(16, 185, 129, 0.12), transparent 70%),
+        linear-gradient(160deg, rgba(25, 34, 56, 0.92), rgba(11, 15, 25, 0.96));
+      backdrop-filter: blur(16px);
+      border: 1.5px solid rgba(245, 158, 11, 0.5);
+      border-radius: var(--radius-xl);
+      padding: 28px 24px;
+      box-shadow: var(--shadow), 0 0 50px rgba(16, 185, 129, 0.12), 0 0 32px rgba(245, 158, 11, 0.08);
+      text-align: center;
+      display: grid; gap: 14px; justify-items: center;
+    }
+    .hero__card-title { font-family: var(--font-head); font-size: 1.65rem; font-weight: 800; letter-spacing: 0.1em; color: var(--accent); line-height: 1.15; }
+    .hero__card-sub { font-size: 0.86rem; color: var(--text-muted); max-width: 310px; }
+    .hero__stats {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%;
+      padding-top: 14px; border-top: 1px solid var(--border);
+    }
+    .hero__stat strong { display: block; font-family: var(--font-head); font-size: 1.12rem; color: var(--primary); }
+    .hero__stat span { font-size: 0.72rem; color: var(--text-muted); }
+
+    /* =========================================================
+       UNIVERSAL VENUE / SPACE SWITCHER
+       ========================================================= */
+    .branch-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 26px 22px;
+      box-shadow: var(--shadow);
+    }
+    .city-tag {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 6px;
+      font-size: 0.82rem; line-height: 1.35; color: var(--primary); font-weight: 600;
+      padding: 9px 18px; border-radius: 999px;
+      background: rgba(16, 185, 129, 0.1); border: 1px solid var(--emerald-line);
+      text-align: center;
+    }
+    .branch-tabs {
+      display: grid; grid-template-columns: 1fr; gap: 14px;
+      max-width: 720px; margin: 0 auto;
+    }
+    @media (min-width: 600px) {
+      .branch-tabs { grid-template-columns: repeat(2, 1fr); }
+    }
+    .branch-tab {
+      position: relative;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+      padding: 18px 18px; border-radius: var(--radius-lg);
+      background: var(--bg); border: 1.5px solid var(--border);
+      color: var(--text-muted); cursor: pointer; text-align: center;
+      transition: all .22s var(--ease);
+    }
+    .branch-tab:hover { border-color: rgba(245, 158, 11, 0.45); }
+    .branch-tab strong { font-family: var(--font-head); font-size: 1rem; color: var(--text); }
+    .branch-tab span { font-size: 0.8rem; color: var(--text-muted); }
+    .branch-tab__dot {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--text-muted); margin-top: 2px;
+    }
+    .branch-tab.is-active {
+      background: linear-gradient(155deg, rgba(16, 185, 129, 0.14), rgba(245, 158, 11, 0.08));
+      border-color: var(--accent);
+      box-shadow: 0 0 24px rgba(245, 158, 11, 0.16);
+    }
+    .branch-tab.is-active strong { color: var(--accent); }
+    .branch-tab.is-active .branch-tab__dot { color: var(--primary); }
+
+    /* =========================================================
+       SESSION TYPES & PRICING (3-CARD GRID)
+       ========================================================= */
+    .packages-grid {
+      display: grid; grid-template-columns: 1fr; gap: 22px;
+    }
+    @media (min-width: 820px) { .packages-grid { grid-template-columns: repeat(3, 1fr); } }
+    .pkg-card {
+      position: relative;
+      background:
+        radial-gradient(260px 140px at 85% 0%, rgba(16, 185, 129, 0.08), transparent 70%),
+        linear-gradient(175deg, var(--card-elev) 0%, var(--card) 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl); padding: 28px 22px 24px;
+      display: flex; flex-direction: column;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      transition: transform .25s var(--ease), border-color .25s, box-shadow .25s;
+    }
+    .pkg-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(245, 158, 11, 0.65);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5), 0 0 24px rgba(16, 185, 129, 0.12);
+    }
+    .pkg-card.is-featured {
+      border: 1.5px solid rgba(245, 158, 11, 0.55);
+      background:
+        radial-gradient(280px 160px at 50% 0%, rgba(245, 158, 11, 0.12), transparent 72%),
+        linear-gradient(170deg, #18233A 0%, var(--card) 68%);
+    }
+    .pkg-card.is-selected {
+      border: 2px solid var(--accent);
+      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25), var(--shadow);
+    }
+    .pkg-card__badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      padding: 4px 14px; border-radius: 999px; white-space: nowrap;
+      background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+      color: #140D02; font-family: var(--font-head); font-weight: 700; font-size: 0.72rem; letter-spacing: 0.08em;
+    }
+    .pkg-card__dur { font-size: 0.76rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--primary); }
+    .pkg-card__name { font-size: 1.2rem; font-weight: 700; color: var(--text); margin-top: 4px; }
+    .pkg-card__price {
+      font-family: var(--font-head); font-weight: 800; font-size: 2.35rem; color: var(--accent);
+      margin: 12px 0 4px; line-height: 1.1;
+    }
+    .pkg-card__meta { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+    .pkg-card__list { display: grid; gap: 9px; margin-bottom: 22px; flex: 1; }
+    .pkg-card__list li { display: flex; gap: 9px; align-items: flex-start; font-size: 0.86rem; color: #E2E8F0; }
+    .pkg-card__list li::before {
+      content: "✓"; flex: none; width: 18px; height: 18px; border-radius: 50%;
+      display: grid; place-items: center; font-size: 0.7rem; font-weight: 700;
+      background: rgba(16, 185, 129, 0.18); color: var(--primary); margin-top: 2px;
+    }
+    .pkg-card .btn { width: 100%; }
+
+    /* =========================================================
+       BOOKING ENGINE & LIVE SUMMARY LAYOUT
+       ========================================================= */
+    .booking-layout {
+      display: grid; gap: 26px; align-items: start;
+    }
+    @media (min-width: 960px) {
+      .booking-layout { grid-template-columns: 1.25fr 0.75fr; }
+      .summary-sticky { position: sticky; top: calc(var(--nav-h) + 18px); }
+    }
+    .booking-card {
+      background: var(--card); border: 1px solid var(--line-strong);
+      border-radius: var(--radius-xl); padding: 26px 22px; box-shadow: var(--shadow);
+    }
+    .step-title {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.05rem; font-weight: 700; color: var(--accent);
+      margin: 24px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
+    }
+    .step-title:first-child { margin-top: 0; }
+    .step-num {
+      width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: #042419;
+      font-size: 0.78rem; font-weight: 800; flex: none;
+    }
+
+    .form-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    @media (min-width: 600px) { .form-grid { grid-template-columns: 1fr 1fr; } }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field--full { grid-column: 1 / -1; }
+    .field label { font-family: var(--font-head); font-weight: 500; font-size: 0.85rem; color: var(--accent); }
+    .field input[type="text"], .field input[type="tel"], .field input[type="date"], .field input[type="number"], .field select {
+      width: 100%; min-height: 48px; padding: 11px 14px; font-size: 0.96rem; color: var(--text);
+      background: var(--bg); border: 1.5px solid var(--border); border-radius: var(--radius-md);
+      color-scheme: dark; transition: border-color .2s, box-shadow .2s;
+    }
+    .field input:focus, .field select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18); }
+    .field.has-error input, .field.has-error select { border-color: var(--error); }
+    .field__error { min-height: 1.1em; font-size: 0.78rem; color: var(--error); }
+    .field__hint { font-size: 0.76rem; color: var(--text-muted); }
+
+    .inline-check {
+      display: inline-flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--text-muted);
+      cursor: pointer; margin-top: 4px; user-select: none;
+    }
+    .inline-check input { width: 17px; height: 17px; accent-color: var(--primary); cursor: pointer; }
+
+    .stepper {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .stepper button {
+      width: 44px; height: 48px; border-radius: var(--radius-md); border: 1.5px solid var(--line-strong);
+      background: var(--bg); color: var(--accent); font-size: 1.25rem; font-weight: 700; cursor: pointer;
+    }
+    .stepper button:hover { background: rgba(245, 158, 11, 0.15); }
+    .stepper input { text-align: center; font-weight: 700; }
+
+    /* =========================================================
+       HOURLY SLOT BOOKING GRID (MOVIE-SEAT STYLE)
+       ========================================================= */
+    .slot-legend {
+      display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; font-size: 0.76rem; color: var(--text-muted);
+    }
+    .slot-legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+    .dot--avail { background: rgba(16, 185, 129, 0.25); border: 1.5px solid var(--primary); }
+    .dot--sel { background: var(--accent); border: 1.5px solid #FCD34D; }
+    .dot--hold { background: rgba(245, 158, 11, 0.22); border: 1.5px solid var(--amber); }
+    .dot--booked { background: #1E293B; border: 1.5px solid #475569; }
+    .dot--unavail { background: #0B0F19; border: 1.5px dashed #334155; }
+
+    .slot-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px;
+    }
+    @media (min-width: 560px) { .slot-grid { grid-template-columns: repeat(5, 1fr); } }
+    .slot-cell {
+      position: relative; min-height: 62px; padding: 8px 6px; border-radius: var(--radius-md);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+      font-family: var(--font-head); text-align: center; cursor: pointer;
+      border: 1.5px solid rgba(16, 185, 129, 0.55);
+      background: rgba(16, 185, 129, 0.1); color: var(--text);
+      transition: transform .16s var(--ease), border-color .16s, background .16s, box-shadow .16s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .slot-cell:hover:not(:disabled) { transform: translateY(-2px); border-color: var(--accent); background: rgba(245, 158, 11, 0.14); }
+    .slot-cell__time { font-size: 0.78rem; font-weight: 700; line-height: 1.15; }
+    .slot-cell__state { font-size: 0.65rem; font-weight: 600; color: var(--primary); }
+
+    .slot-cell.is-selected {
+      background: linear-gradient(145deg, #FBBF24, var(--accent));
+      border-color: #FEF3C7; color: #140D02;
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35);
+    }
+    .slot-cell.is-selected .slot-cell__state { color: #271902; font-weight: 700; }
+
+    .slot-cell.is-booked {
+      background: #1E293B; border-color: #334155; color: #64748B; cursor: not-allowed;
+    }
+    .slot-cell.is-booked .slot-cell__state { color: #94A3B8; }
+
+    .slot-cell.is-hold {
+      background: rgba(245, 158, 11, 0.12); border-color: var(--amber); color: #FDE68A; cursor: not-allowed;
+    }
+    .slot-cell.is-hold .slot-cell__state { color: var(--amber); }
+
+    .slot-cell.is-unavailable {
+      background: var(--bg); border: 1.5px dashed #1E293B; color: #475569; cursor: not-allowed;
+    }
+    .slot-cell.is-unavailable .slot-cell__state { color: #475569; }
+
+    .slot-selected-bar {
+      margin-top: 12px; padding: 11px 14px; border-radius: var(--radius-md);
+      background: rgba(245, 158, 11, 0.08); border: 1px solid var(--line-strong);
+      font-size: 0.85rem; color: var(--accent);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+    }
+
+    /* =========================================================
+       TERMS & CONDITIONS
+       ========================================================= */
+    .terms-box {
+      margin-top: 20px; padding: 16px; border-radius: var(--radius-md);
+      background: var(--bg); border: 1px solid var(--border);
+    }
+    .terms-box h4 { font-size: 0.88rem; color: var(--accent); margin-bottom: 8px; }
+    .terms-list { display: grid; gap: 6px; font-size: 0.79rem; color: var(--text-muted); margin-bottom: 12px; padding-left: 16px; list-style: disc; }
+    .terms-accept {
+      display: flex; align-items: flex-start; gap: 10px; font-size: 0.84rem; font-weight: 600; color: var(--text); cursor: pointer;
+    }
+    .terms-accept input { width: 19px; height: 19px; margin-top: 2px; accent-color: var(--primary); flex: none; cursor: pointer; }
+
+    /* =========================================================
+       LIVE PRICE SUMMARY CARD
+       ========================================================= */
+    .summary-card {
+      background: linear-gradient(180deg, var(--card-elev), var(--card));
+      border: 1.5px solid var(--accent);
+      border-radius: var(--radius-xl); padding: 24px 20px;
+      box-shadow: var(--shadow), 0 0 40px rgba(245, 158, 11, 0.08);
+    }
+    .summary-card h3 { font-size: 1.15rem; color: var(--accent); margin-bottom: 14px; }
+    .summary-rows { display: grid; gap: 10px; font-size: 0.88rem; }
+    .summary-row { display: flex; justify-content: space-between; gap: 10px; color: #CBD5E1; }
+    .summary-row b { font-family: var(--font-head); color: var(--text); text-align: right; }
+    .summary-divider { border-top: 1px dashed var(--line-strong); margin: 10px 0; }
+    .summary-total { font-size: 1rem; font-weight: 700; color: var(--accent); }
+    .summary-total b { font-size: 1.15rem; color: var(--accent); }
+    .summary-paybox {
+      margin-top: 14px; padding: 14px; border-radius: var(--radius-md);
+      background: rgba(16, 185, 129, 0.1); border: 1px solid var(--emerald-line);
+      display: grid; gap: 8px;
+    }
+    .summary-balance {
+      margin-top: 12px; padding: 12px 14px; border-radius: var(--radius-md);
+      background: rgba(245, 158, 11, 0.09); border: 1px solid var(--line-strong);
+      display: flex; justify-content: space-between; align-items: center; gap: 8px;
+      font-size: 0.9rem; font-weight: 600; color: var(--text);
+    }
+    .summary-balance b { font-family: var(--font-head); font-size: 1.15rem; color: var(--accent); }
+    .policy-note {
+      margin-top: 10px; padding: 4px 2px 0;
+      font-size: 0.74rem; color: var(--text-muted); line-height: 1.45;
+    }
+    .form-status { text-align: center; font-size: 0.86rem; margin-top: 12px; min-height: 1.3em; color: var(--primary); }
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+    .footer { background: #070A12; border-top: 1px solid var(--border); padding: 40px 0 28px; text-align: center; }
+    .footer p, .footer li { color: var(--text-muted); font-size: 0.88rem; }
+    .footer a:hover { color: var(--accent); }
+    .footer__bottom {
+      margin-top: 10px; padding-top: 18px; border-top: 1px solid var(--border);
+      text-align: center; color: var(--text-muted); font-size: 0.82rem; width: 100%;
+    }
+
+    /* =========================================================
+       MODALS: MY BOOKINGS, CONFIRMATION, IN-PAGE ALERT
+       ========================================================= */
+    html.mb-lock, html.mb-lock body { overflow: hidden; }
+    .mb-overlay {
+      position: fixed; inset: 0; z-index: 300; display: flex; align-items: center; justify-content: center; padding: 12px;
+      background: rgba(0, 0, 0, 0.78); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      opacity: 0; transition: opacity .24s var(--ease);
+    }
+    .mb-overlay[hidden] { display: none; }
+    .mb-overlay.is-open { opacity: 1; }
+    .mb-panel {
+      position: relative; width: min(500px, 100%); max-height: calc(100vh - 24px); max-height: calc(100dvh - 24px);
+      display: flex; flex-direction: column; overflow: hidden; outline: none;
+      background: linear-gradient(180deg, var(--card-elev), var(--bg-alt)); border: 1px solid var(--line-strong); border-radius: 22px;
+      box-shadow: var(--shadow); transform: translateY(20px) scale(.98); transition: transform .28s var(--ease);
+    }
+    .mb-overlay.is-open .mb-panel { transform: none; }
+    .mb-panel__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 18px 16px 14px 20px; border-bottom: 1px solid var(--border); }
+    .mb-panel__head h2 { font-size: 1.22rem; color: var(--accent); }
+    .mb-panel__head p { color: var(--text-muted); font-size: 0.8rem; margin-top: 3px; }
+    .mb-close {
+      flex: none; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--accent);
+    }
+    .mb-close--float { position: absolute; top: 12px; right: 12px; z-index: 2; }
+    .mb-panel__body { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 16px; display: grid; gap: 14px; align-content: start; }
+    .mb-panel__foot { padding: 12px 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.75rem; text-align: center; }
+
+    .bk-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; display: grid; gap: 12px; }
+    .bk-card__top { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+    .bk-id { font-family: var(--font-head); font-weight: 800; font-size: 1.15rem; color: var(--accent); }
+    .bk-chip { font-size: 0.68rem; font-weight: 600; padding: 4px 10px; border-radius: 999px; color: var(--primary); background: rgba(16, 185, 129, 0.12); border: 1px solid var(--emerald-line); }
+    .bk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; margin: 0; }
+    .bk-grid .is-full { grid-column: 1 / -1; }
+    .bk-grid dt { font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+    .bk-grid dd { margin: 2px 0 0; font-family: var(--font-head); font-weight: 600; font-size: 0.86rem; overflow-wrap: anywhere; color: var(--text); }
+    .bk-pay { border: 1px dashed var(--line-strong); border-radius: 12px; padding: 11px 13px; display: grid; gap: 6px; background: rgba(16, 185, 129, 0.07); }
+    .bk-pay__row { display: flex; justify-content: space-between; font-size: 0.84rem; color: #E2E8F0; }
+    .bk-pay__row--due { border-top: 1px solid var(--border); padding-top: 7px; margin-top: 2px; color: var(--accent); font-weight: 600; }
+    .bk-pay__row--due b { color: var(--accent); font-size: 1.02rem; }
+    .bk-actions { display: grid; gap: 9px; }
+    .bk-actions .btn { width: 100%; min-height: 46px; font-size: 0.86rem; }
+
+    .cf-body { padding-top: 24px; justify-items: center; text-align: center; }
+    .cf-badge { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; color: var(--primary); background: rgba(16, 185, 129, 0.12); border: 2px solid var(--emerald-line); font-size: 1.7rem; font-weight: 800; }
+    .cf-id { width: 100%; padding: 12px; border-radius: 14px; border: 1px solid var(--line-strong); background: var(--bg); }
+    .cf-id span { display: block; font-size: 0.66rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); }
+    .cf-id b { font-family: var(--font-head); font-weight: 800; font-size: 1.7rem; color: var(--accent); }
+    .cf-summary { width: 100%; margin: 0; display: grid; gap: 7px; padding: 12px 14px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); text-align: left; }
+    .cf-summary div { display: flex; justify-content: space-between; gap: 10px; font-size: 0.85rem; }
+    .cf-summary dt { color: var(--text-muted); }
+    .cf-summary dd { margin: 0; font-family: var(--font-head); font-weight: 600; text-align: right; color: var(--text); }
+
+    .mb-toast {
+      position: fixed; left: 50%; bottom: 20px; z-index: 400; max-width: min(440px, calc(100% - 28px));
+      transform: translate(-50%, 16px); opacity: 0; pointer-events: none; text-align: center;
+      padding: 12px 18px; border-radius: 12px; font-size: 0.86rem; color: var(--text); background: var(--card-elev);
+      border: 1px solid var(--line-strong); box-shadow: var(--shadow); transition: opacity .24s, transform .24s;
+    }
+    .mb-toast.is-show { opacity: 1; transform: translate(-50%, 0); }
+    .mb-toast.is-error { border-color: var(--error); }
+  </style>
+</head>
+<body>
+  <!-- ================= NAVIGATION ================= -->
+  <header class="nav">
+    <div class="container nav__inner">
+      <a href="#home" class="brand" aria-label="ARYXWEB home">
+        <span class="crest-wrap" aria-hidden="true">
+          <svg viewBox="0 0 120 120" aria-hidden="true">
+            <defs>
+              <linearGradient id="axGoldNav" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FCD34D"/>
+                <stop offset="50%" stop-color="#F59E0B"/>
+                <stop offset="100%" stop-color="#D97706"/>
+              </linearGradient>
+              <linearGradient id="axEmeraldNav" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#34D399"/>
+                <stop offset="100%" stop-color="#059669"/>
+              </linearGradient>
+            </defs>
+            <circle cx="60" cy="60" r="56" fill="#0B0F19" stroke="url(#axGoldNav)" stroke-width="3"/>
+            <circle cx="60" cy="60" r="49" fill="none" stroke="url(#axEmeraldNav)" stroke-width="1.5" stroke-dasharray="6 4"/>
+            <text x="60" y="71" text-anchor="middle" fill="url(#axGoldNav)" font-family="Poppins, sans-serif" font-size="40" font-weight="800" letter-spacing="2">AX</text>
+          </svg>
+        </span>
+        <span class="brand__txt">
+          <span class="brand__name">ARYXWEB</span>
+          <span class="brand__sub">STUDIO &amp; HALL BOOKING</span>
+        </span>
+      </a>
+
+      <nav class="nav__links" aria-label="Main navigation">
+        <a href="#spaces">Spaces</a>
+        <a href="#sessions">Sessions</a>
+        <a href="#book">Book Slot</a>
+        <a href="#contact">Contact</a>
+        <a href="#book" class="btn btn--emerald">Reserve Now</a>
+      </nav>
+
+      <div class="nav__actions">
+        <button type="button" class="mb-btn js-open-bookings" id="myBookingsBtn" aria-haspopup="dialog" aria-label="My Bookings, 0 saved">
+          <span aria-hidden="true">🎟️</span>
+          <span class="mb-btn__label">My Bookings</span>
+          <span>(<span class="js-mb-count">0</span>)</span>
+        </button>
+        <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navDrawer" aria-label="Open menu"><span></span></button>
+      </div>
+    </div>
+
+    <div class="nav__drawer" id="navDrawer">
+      <a href="#spaces">Studio &amp; Hall Spaces</a>
+      <a href="#sessions">Session Types &amp; Pricing</a>
+      <a href="#book">Hourly Slot Booking</a>
+      <a href="#contact">Contact</a>
+      <button type="button" class="nav__mb js-open-bookings">🎟️ My Bookings (<span class="js-mb-count">0</span>)</button>
+      <a href="#book" class="btn btn--emerald">Reserve Your Slot</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- ================= HERO ================= -->
+    <section class="hero" id="home">
+      <div class="container hero__grid">
+        <div>
+          <span class="hero__badge">⚡ ARYXWEB Universal Venue Booking Demo</span>
+          <h1>Book Your Studio or Event Hall Instantly</h1>
+          <p class="hero__desc">Live hourly slot availability, instant online token advance, and automated digital booking passes for dance studios, rehearsal halls, shoots, and private events.</p>
+          <div class="hero__highlights">
+            <span class="hero__pill">💃 Dance / Rehearsal from <b>₹800</b></span>
+            <span class="hero__pill">📸 Shoot Floor from <b>₹1,200</b></span>
+            <span class="hero__pill">🔒 Token Advance <b>₹500</b></span>
+          </div>
+          <div class="hero__ctas">
+            <a href="#book" class="btn btn--emerald">Book Your Hourly Slot</a>
+            <a href="#sessions" class="btn btn--ghost">View Session Pricing</a>
+          </div>
+        </div>
+
+        <div class="hero__card">
+          <div class="crest-wrap crest-wrap--lg" aria-hidden="true">
+            <svg viewBox="0 0 120 120" aria-hidden="true">
+              <defs>
+                <linearGradient id="axGoldHero" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#FCD34D"/>
+                  <stop offset="50%" stop-color="#F59E0B"/>
+                  <stop offset="100%" stop-color="#D97706"/>
+                </linearGradient>
+                <linearGradient id="axEmeraldHero" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#34D399"/>
+                  <stop offset="100%" stop-color="#059669"/>
+                </linearGradient>
+              </defs>
+              <circle cx="60" cy="60" r="56" fill="#0B0F19" stroke="url(#axGoldHero)" stroke-width="3"/>
+              <circle cx="60" cy="60" r="49" fill="none" stroke="url(#axEmeraldHero)" stroke-width="1.5" stroke-dasharray="6 4"/>
+              <text x="60" y="71" text-anchor="middle" fill="url(#axGoldHero)" font-family="Poppins, sans-serif" font-size="40" font-weight="800" letter-spacing="2">AX</text>
+            </svg>
+          </div>
+          <div class="hero__card-title">ARYXWEB</div>
+          <p class="hero__card-sub">Universal studio and event hall booking platform with real-time slot locking, Razorpay token advance, and instant PNG digital passes.</p>
+          <div class="hero__stats">
+            <div class="hero__stat"><strong>2 Spaces</strong><span>Studio &amp; Hall</span></div>
+            <div class="hero__stat"><strong>9 AM–12 AM</strong><span>Hourly Slots</span></div>
+            <div class="hero__stat"><strong>Instant</strong><span>PNG Pass</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= UNIVERSAL VENUE / SPACE SWITCHER ================= -->
+    <section class="section section--alt" id="spaces">
+      <div class="container">
+        <div class="section__head">
+          <span class="section__kicker">Select Your Space</span>
+          <h2>Choose Your Studio or Event Hall</h2>
+          <div class="gold-rule"></div>
+          <p>Switch between our demo studio floor and private event hall to check live hourly slot availability.</p>
+        </div>
+
+        <div class="branch-panel">
+          <div class="branch-tabs" role="tablist" aria-label="Venue Space Switcher">
+            <button type="button" class="branch-tab is-active" id="branchTabMain" data-branch="Main Studio" role="tab" aria-selected="true">
+              <strong>🏢 Main AC Studio (1,000 sq. ft.)</strong>
+              <span>Dance, Rehearsal &amp; Shoot Floor</span>
+              <span class="branch-tab__dot">● Selected Space</span>
+            </button>
+            <button type="button" class="branch-tab" id="branchTabAnnex" data-branch="Annex Hall" role="tab" aria-selected="false">
+              <strong>🏛️ Studio Annex / Event Hall</strong>
+              <span>Private Events &amp; Group Sessions</span>
+              <span class="branch-tab__dot">○ Tap to Switch</span>
+            </button>
+          </div>
+          <div style="text-align: center; margin-top: 18px;">
+            <div class="city-tag" id="branchStatusPill">
+              ✨ Live Hourly Availability • Customizable For Your Venue
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SESSION TYPES & PRICING ================= -->
+    <section class="section" id="sessions">
+      <div class="container">
+        <div class="section__head">
+          <span class="section__kicker">Transparent Hourly Rates</span>
+          <h2>Select Your Session Type</h2>
+          <div class="gold-rule"></div>
+          <p>Choose a 1-hour studio session or a 2-hour exclusive event hall booking. Base capacity and extra-person rates update automatically.</p>
+        </div>
+
+        <div class="packages-grid" id="packagesGrid"></div>
+      </div>
+    </section>
+
+    <!-- ================= INTERACTIVE BOOKING ENGINE ================= -->
+    <section class="section section--alt" id="book">
+      <div class="container">
+        <div class="section__head">
+          <span class="section__kicker">Live Availability &amp; Checkout</span>
+          <h2>Book Your Studio or Hall Slot</h2>
+          <div class="gold-rule"></div>
+          <p>Pick your date, select consecutive hourly slots, and confirm your booking with a ₹500 online advance.</p>
+        </div>
+
+        <div class="booking-layout">
+          <form class="booking-card" id="bookingForm" novalidate>
+            <div class="step-title"><span class="step-num">1</span> Space, Session &amp; Guest Details</div>
+            <div class="form-grid">
+              <div class="field">
+                <label for="branchSelect">Selected Space</label>
+                <select id="branchSelect" name="branch">
+                  <option value="Main Studio">🏢 Main AC Studio (1,000 sq. ft.)</option>
+                  <option value="Annex Hall">🏛️ Studio Annex / Event Hall</option>
+                </select>
+                <span class="field__error" id="branchErr"></span>
+              </div>
+
+              <div class="field">
+                <label for="packageSelect">Selected Session</label>
+                <select id="packageSelect" name="packageId" required></select>
+                <span class="field__error" id="packageErr"></span>
+              </div>
+
+              <div class="field">
+                <label for="celebrationType">Session / Event Purpose</label>
+                <select id="celebrationType" name="celebrationType" required>
+                  <option value="" disabled selected>Select session purpose</option>
+                  <option>Dance Practice</option>
+                  <option>Rehearsal</option>
+                  <option>Photoshoot</option>
+                  <option>Video / Reel Shoot</option>
+                  <option>Birthday Party</option>
+                  <option>Private Event</option>
+                  <option>Group Activity</option>
+                  <option>Other</option>
+                </select>
+                <span class="field__error" id="celebrationTypeErr"></span>
+              </div>
+
+              <div class="field">
+                <label for="totalPersons">Total Persons (<span id="baseGuestsHint">Base 10</span>)</label>
+                <div class="stepper">
+                  <button type="button" id="guestsMinus" aria-label="Decrease guests">−</button>
+                  <input type="number" id="totalPersons" name="totalPersons" min="1" max="100" value="10" required>
+                  <button type="button" id="guestsPlus" aria-label="Increase guests">+</button>
+                </div>
+                <span class="field__hint" id="extraGuestHint">Base capacity included; extra persons billed at venue balance.</span>
+                <span class="field__error" id="totalPersonsErr"></span>
+              </div>
+            </div>
+
+            <div class="step-title"><span class="step-num">2</span> Date &amp; Interactive Hourly Slot Grid</div>
+            <div class="form-grid">
+              <div class="field field--full">
+                <label for="bookingDate">Booking Date</label>
+                <input type="date" id="bookingDate" name="bookingDate" required>
+                <span class="field__error" id="bookingDateErr"></span>
+              </div>
+
+              <div class="field field--full">
+                <label>Select Start Hour (Operating Hours: 09:00 AM – 12:00 AM Midnight)</label>
+                <div class="slot-legend">
+                  <span><i class="dot dot--avail"></i> Available</span>
+                  <span><i class="dot dot--sel"></i> Selected</span>
+                  <span><i class="dot dot--hold"></i> Temp. Reserved</span>
+                  <span><i class="dot dot--booked"></i> Booked</span>
+                  <span><i class="dot dot--unavail"></i> Unavailable</span>
+                </div>
+                <div class="slot-grid" id="slotGrid" role="group" aria-label="Hourly slot grid"></div>
+                <div class="slot-selected-bar" id="slotSelectedBar">
+                  <span id="slotSelectedText">Select a date and starting hour to reserve consecutive hours.</span>
+                  <strong id="slotDurationTag">1 Hour</strong>
+                </div>
+                <span class="field__error" id="slotErr"></span>
+              </div>
+            </div>
+
+            <div class="step-title"><span class="step-num">3</span> Customer Details &amp; Terms</div>
+            <div class="form-grid">
+              <div class="field field--full">
+                <label for="customerName">Full Name</label>
+                <input type="text" id="customerName" name="customerName" placeholder="Enter your full name" autocomplete="name" required>
+                <span class="field__error" id="customerNameErr"></span>
+              </div>
+
+              <div class="field">
+                <label for="contactNumber">Contact Number</label>
+                <input type="tel" id="contactNumber" name="contactNumber" placeholder="10-digit Indian mobile" autocomplete="tel" inputmode="tel" required>
+                <span class="field__error" id="contactNumberErr"></span>
+              </div>
+
+              <div class="field">
+                <label for="whatsappNumber">WhatsApp Number</label>
+                <input type="tel" id="whatsappNumber" name="whatsappNumber" placeholder="10-digit WhatsApp number" inputmode="tel" required>
+                <label class="inline-check">
+                  <input type="checkbox" id="sameAsContact"> Same as Contact Number
+                </label>
+                <span class="field__error" id="whatsappNumberErr"></span>
+              </div>
+            </div>
+
+            <div class="terms-box">
+              <h4>Studio &amp; Event Hall Terms &amp; Conditions</h4>
+              <ul class="terms-list">
+                <li>Valid Government ID is mandatory for check-in at the venue.</li>
+                <li>Customers are responsible for any damage to flooring, mirrors, sound systems, or studio equipment.</li>
+                <li>Smoking, alcohol, and prohibited items are strictly not permitted inside the studio or event hall.</li>
+                <li>Online token advance (₹500) is non-refundable upon booking confirmation.</li>
+                <li>Premises are monitored by CCTV surveillance for safety and security.</li>
+              </ul>
+              <label class="terms-accept">
+                <input type="checkbox" id="termsAccept" required>
+                <span>I have read and accept all ARYXWEB Studio &amp; Hall Terms &amp; Conditions.</span>
+              </label>
+              <span class="field__error" id="termsErr"></span>
+            </div>
+
+            <div style="margin-top: 20px;">
+              <button type="submit" class="btn btn--emerald" id="submitBtn" style="width: 100%; min-height: 54px;">
+                Pay ₹500 Online &amp; Confirm Booking
+              </button>
+            </div>
+            <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+          </form>
+
+          <!-- LIVE PRICE SUMMARY -->
+          <aside class="summary-sticky" aria-label="Live Price Summary">
+            <div class="summary-card">
+              <h3>Live Price Summary</h3>
+              <div class="summary-rows">
+                <div class="summary-row"><span>Space</span><b id="sumBranch">Main AC Studio (1,000 sq. ft.)</b></div>
+                <div class="summary-row"><span>Session</span><b id="sumPackage">Dance / Rehearsal Session (1 Hr)</b></div>
+                <div class="summary-row"><span>Slot</span><b id="sumSlot">Not selected</b></div>
+                <div class="summary-row"><span>Persons</span><b id="sumGuests">10 (Base: 10)</b></div>
+                <div class="summary-divider"></div>
+                <div class="summary-row"><span>Base Session Price</span><b id="sumPkgPrice">₹800</b></div>
+                <div class="summary-row"><span>Extra Person Charge</span><b id="sumExtraGuests">₹0</b></div>
+                <div class="summary-divider"></div>
+                <div class="summary-row summary-total"><span>Total Booking Amount</span><b id="sumTotal">₹800</b></div>
+              </div>
+
+              <div class="summary-paybox">
+                <div class="summary-row" style="color: var(--primary); font-weight: 700;">
+                  <span>Online Advance</span><b id="sumOnlinePay" style="color: var(--primary);">₹500</b>
+                </div>
+                <div class="summary-row" style="color: var(--text-muted); font-size: 0.82rem;">
+                  <span>Gateway Fee</span><b id="sumGatewayFee" style="color: var(--text);">₹0</b>
+                </div>
+              </div>
+
+              <div class="summary-balance">
+                <span>Balance Payable at Venue</span>
+                <b id="sumBalance">₹300</b>
+              </div>
+
+              <p class="policy-note" id="paymentPolicyNote">
+                Zero gateway fee. Pay ₹500 online token advance via Razorpay and settle the remaining balance at the venue.
+              </p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CONTACT ================= -->
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="section__head">
+          <span class="section__kicker">Get In Touch</span>
+          <h2>ARYXWEB Digital Solutions</h2>
+          <div class="gold-rule"></div>
+          <p>Want this live studio &amp; event hall booking system customized with your venue's name, branding, and pricing?</p>
+        </div>
+
+        <div class="packages-grid" style="grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); max-width: 780px; margin: 0 auto;">
+          <div class="pkg-card">
+            <span class="pkg-card__dur">Direct Support &amp; Sales</span>
+            <h3 class="pkg-card__name">ARYXWEB Digital Solutions</h3>
+            <p style="color: var(--text-muted); font-size: 0.88rem; margin: 10px 0 14px;">Custom booking systems for dance studios, rehearsal halls, shoot floors, and private event venues.</p>
+            <p style="font-size: 0.9rem; margin-bottom: 18px; color: var(--text);">Phone / WhatsApp: <a href="tel:+919372503446" style="color: var(--accent); font-weight: 700;">+91 93725 03446</a></p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: auto;">
+              <a class="btn btn--ghost" href="tel:+919372503446" style="padding: 10px 12px; font-size: 0.84rem;">📞 Call Now</a>
+              <a class="btn btn--emerald" href="https://wa.me/919372503446" target="_blank" rel="noopener noreferrer" style="padding: 10px 12px; font-size: 0.84rem;">💬 WhatsApp</a>
+            </div>
+          </div>
+
+          <div class="pkg-card">
+            <span class="pkg-card__dur">Universal Demo Spaces</span>
+            <h3 class="pkg-card__name">Live Demo Configuration</h3>
+            <p style="color: var(--text-muted); font-size: 0.88rem; margin: 10px 0 14px;">Includes real-time Firebase hourly slot locking, Razorpay ₹500 token checkout, and instant PNG Digital Passes.</p>
+            <p style="font-size: 0.86rem; color: var(--primary); font-weight: 600; margin-bottom: 18px;">✓ Main AC Studio &amp; Annex Event Hall Active</p>
+            <a class="btn btn--gold" href="#book" style="margin-top: auto; width: 100%;">Test Live Booking Flow ↑</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <div class="container" style="display: grid; gap: 14px; justify-items: center;">
+      <div class="brand" style="justify-content: center;">
+        <span class="brand__name">ARYXWEB</span>
+      </div>
+      <nav aria-label="Footer navigation" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; font-size: 0.86rem; color: var(--accent); font-weight: 500;">
+        <a href="#spaces">Spaces</a>
+        <span aria-hidden="true">&bull;</span>
+        <a href="#sessions">Sessions</a>
+        <span aria-hidden="true">&bull;</span>
+        <a href="#book">Book Slot</a>
+        <span aria-hidden="true">&bull;</span>
+        <a href="https://wa.me/919372503446" target="_blank" rel="noopener noreferrer">WhatsApp Support</a>
+      </nav>
+      <p class="footer__bottom">© 2026 ARYXWEB. Want this booking system in your venue's name &amp; logo? Contact +91 93725 03446.</p>
+    </div>
+  </footer>
+
+  <!-- ================= MY BOOKINGS DRAWER ================= -->
+  <div class="mb-overlay" id="mbOverlay" hidden>
+    <div class="mb-panel" role="dialog" aria-modal="true" aria-labelledby="mbTitle" tabindex="-1">
+      <div class="mb-panel__head">
+        <div>
+          <h2 id="mbTitle">🎟️ My Bookings</h2>
+          <p id="mbSub">Your confirmed ARYXWEB Studio &amp; Hall bookings appear here</p>
+        </div>
+        <button type="button" class="mb-close" id="mbClose" aria-label="Close My Bookings">✕</button>
+      </div>
+      <div class="mb-panel__body" id="mbList"></div>
+      <div class="mb-panel__foot" id="mbFoot">Saved in this browser on this device.</div>
+    </div>
+  </div>
+
+  <!-- ================= BOOKING CONFIRMED MODAL ================= -->
+  <div class="mb-overlay" id="cfOverlay" hidden>
+    <div class="mb-panel" id="cfPanel" role="dialog" aria-modal="true" aria-labelledby="cfTitle" tabindex="-1">
+      <button type="button" class="mb-close mb-close--float" id="cfClose" aria-label="Close confirmation">✕</button>
+      <div class="mb-panel__body cf-body">
+        <div class="cf-badge" aria-hidden="true">✓</div>
+        <h2 id="cfTitle">Booking Confirmed!</h2>
+        <div class="cf-id"><span>Booking ID</span><b id="cfBookingId">ARYX-000000</b></div>
+        <dl class="cf-summary" id="cfSummary"></dl>
+        <div class="bk-actions" style="width: 100%;">
+          <button type="button" class="btn btn--emerald" id="cfDownload">📥 Download Digital Booking Pass (PNG)</button>
+          <button type="button" class="btn btn--ghost" id="cfWhatsApp">📲 Send Copy on WhatsApp</button>
+          <button type="button" class="btn btn--ghost" id="cfShare" hidden>📤 Share Pass Image</button>
+          <button type="button" class="btn btn--ghost" id="cfView">🎟️ View My Bookings</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= IN-PAGE NOTICE MODAL ================= -->
+  <div class="mb-overlay" id="noticeOverlay" hidden>
+    <div class="mb-panel" role="dialog" aria-modal="true" aria-labelledby="noticeTitle" tabindex="-1" style="max-width: 420px;">
+      <div class="mb-panel__head">
+        <div><h2 id="noticeTitle">Notice</h2></div>
+        <button type="button" class="mb-close" id="noticeClose" aria-label="Close notice">✕</button>
+      </div>
+      <div class="mb-panel__body">
+        <p id="noticeMessage" style="font-size: 0.92rem; color: var(--text); line-height: 1.55;"></p>
+        <button type="button" class="btn btn--emerald" id="noticeOk" style="width: 100%;">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-toast" id="mbToast" role="status" aria-live="polite"></div>
+
+  <!-- Firebase v8 + Razorpay Checkout -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+  <script>
+    (function () {
+      'use strict';
+
+      /* =========================================================
+         1. CENTRALIZED CONFIGURATION
+         ========================================================= */
+      var BRAND = {
+        name: 'ARYXWEB',
+        subtitle: 'STUDIO & HALL BOOKING',
+        company: 'ARYXWEB Digital Solutions',
+        phoneDisplay: '+91 93725 03446',
+        whatsappDigits: '919372503446',
+        whatsappUrl: 'https://wa.me/919372503446'
+      };
+
+      const PAYMENT_CONFIG = {
+        razorpayKey: 'rzp_test_TyPqbXmV5yrlSJ',
+        venueAdvance: 500,
+        gatewayFee: 0,
+        expectedOnlineTotal: 500,
+        currency: 'INR',
+        holdTtlMs: 5 * 60 * 1000 // 5-minute atomic temporary hold during checkout
+      };
+
+      /*
+       * SECURITY ARCHITECTURE:
+       * Set enabled: true and configure your deployed Firebase Cloud Functions URLs
+       * for production server-side order creation and HMAC-SHA256 signature verification.
+       */
+      var BACKEND_CONFIG = {
+        enabled: false,
+        createOrderUrl: '',
+        verifyPaymentUrl: ''
+      };
+
+      const BOOKINGS_NODE = 'aryx_studio_bookings';
+      const LOCKS_NODE = 'aryx_studio_locks';
+      var HISTORY_KEY = 'aryx_studio_booking_history_v1';
+
+      var PACKAGES = {
+        dance_rehearsal: {
+          id: 'dance_rehearsal',
+          name: '💃 Dance / Rehearsal Session',
+          shortName: 'Dance / Rehearsal Session',
+          price: 800,
+          durationHours: 1,
+          baseGuests: 10,
+          extraGuestRate: 100,
+          badge: '',
+          featured: false,
+          features: [
+            '1,000 sq. ft. AC Floor',
+            'Mirror Wall & Sound System',
+            'Instant Hourly Lock'
+          ]
+        },
+        photoshoot_reel: {
+          id: 'photoshoot_reel',
+          name: '📸 Photoshoot / Reel Shoot',
+          shortName: 'Photoshoot / Reel Shoot',
+          price: 1200,
+          durationHours: 1,
+          baseGuests: 6,
+          extraGuestRate: 150,
+          badge: 'POPULAR FOR CREATORS',
+          featured: true,
+          features: [
+            'Full AC Studio Access',
+            'Studio Lighting Setup',
+            'Changing Room Access'
+          ]
+        },
+        birthday_event: {
+          id: 'birthday_event',
+          name: '🎉 Birthday / Private Event',
+          shortName: 'Birthday / Private Event',
+          price: 2500,
+          durationHours: 2,
+          baseGuests: 20,
+          extraGuestRate: 150,
+          badge: '2-HOUR EXCLUSIVE',
+          featured: false,
+          features: [
+            'Full Hall Exclusive Access',
+            'Basic Seating & Sound',
+            'Flexible Event Setup'
+          ]
+        }
+      };
+
+      var SESSION_ORDER = ['dance_rehearsal', 'photoshoot_reel', 'birthday_event'];
+
+      var BRANCHES = {
+        'Main Studio': {
+          id: 'Main Studio',
+          name: 'Main AC Studio (1,000 sq. ft.)',
+          shortName: 'Main AC Studio',
+          subtitle: 'Dance, Rehearsal & Shoot Floor',
+          packages: SESSION_ORDER
+        },
+        'Annex Hall': {
+          id: 'Annex Hall',
+          name: 'Studio Annex / Event Hall',
+          shortName: 'Studio Annex / Event Hall',
+          subtitle: 'Private Events & Group Sessions',
+          packages: SESSION_ORDER
+        }
+      };
+
+      /* =========================================================
+         2. FIREBASE INITIALIZATION (PRESERVED)
+         ========================================================= */
+      var db = null;
+      try {
+        var firebaseConfig = {
+          apiKey: 'AIzaSyDiGopFOIBanHJROTXL-0sIDAoIVwUSf_w',
+          authDomain: 'football-manager-be26f.firebaseapp.com',
+          databaseURL: 'https://football-manager-be26f-default-rtdb.firebaseio.com',
+          projectId: 'football-manager-be26f'
+        };
+        if (window.firebase) {
+          if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+          db = firebase.database();
+        }
+      } catch (err) {
+        console.error('Firebase init failed:', err);
+      }
+
+      /* =========================================================
+         3. APPLICATION STATE
+         ========================================================= */
+      var state = {
+        branch: 'Main Studio',
+        packageId: 'dance_rehearsal',
+        bookingDate: '',
+        selectedStartHour: null,
+        totalPersons: 10,
+        slotLocks: {},
+        legacyBookings: [],
+        processing: false,
+        activeLockRef: null,
+        activeBookingsRef: null
+      };
+
+      /* =========================================================
+         4. UTILITIES & DOM HELPERS
+         ========================================================= */
+      function pad(n) { return n < 10 ? '0' + n : String(n); }
+      function todayISO() {
+        var d = new Date();
+        return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+      }
+      function money(n) {
+        return '\u20B9' + String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      }
+      function formatDate(iso) {
+        if (!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return 'Not selected';
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var p = iso.split('-');
+        return parseInt(p[2], 10) + ' ' + months[parseInt(p[1], 10) - 1] + ' ' + p[0];
+      }
+      function formatHour12(hour24) {
+        if (hour24 === 24 || hour24 === 0) return '12:00 AM';
+        if (hour24 === 12) return '12:00 PM';
+        return hour24 > 12 ? pad(hour24 - 12) + ':00 PM' : pad(hour24) + ':00 AM';
+      }
+      function formatSlotRange(startHour, duration) {
+        return formatHour12(startHour) + ' – ' + formatHour12(startHour + duration);
+      }
+      function normalizePhone(raw) {
+        var digits = String(raw || '').replace(/[\s\-().]/g, '');
+        if (digits.indexOf('+91') === 0) digits = digits.slice(3);
+        else if (digits.indexOf('91') === 0 && digits.length === 12) digits = digits.slice(2);
+        else if (digits.charAt(0) === '0' && digits.length === 11) digits = digits.slice(1);
+        return /^[6-9]\d{9}$/.test(digits) ? digits : null;
+      }
+      function h(tag, cls, text) {
+        var el = document.createElement(tag);
+        if (cls) el.className = cls;
+        if (text !== undefined && text !== null) el.textContent = text;
+        return el;
+      }
+
+      /* ---------- In-page notice & toast ---------- */
+      var toastTimer = null;
+      function toast(msg, isError) {
+        var el = document.getElementById('mbToast');
+        if (!el) return;
+        el.textContent = msg;
+        el.classList.toggle('is-error', !!isError);
+        el.classList.add('is-show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () { el.classList.remove('is-show'); }, isError ? 5500 : 3800);
+      }
+      function showNotice(title, msg) {
+        document.getElementById('noticeTitle').textContent = title || 'Notice';
+        document.getElementById('noticeMessage').textContent = msg || '';
+        openModal(document.getElementById('noticeOverlay'));
+      }
+
+      /* =========================================================
+         5. NAVIGATION
+         ========================================================= */
+      var navToggle = document.getElementById('navToggle');
+      var navDrawer = document.getElementById('navDrawer');
+      function setMenu(open) {
+        navDrawer.classList.toggle('is-open', open);
+        navToggle.setAttribute('aria-expanded', String(open));
+      }
+      navToggle.addEventListener('click', function () { setMenu(!navDrawer.classList.contains('is-open')); });
+      navDrawer.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
+
+      /* =========================================================
+         6. UNIVERSAL VENUE / SPACE SWITCHER
+         ========================================================= */
+      function renderBranchUI() {
+        document.querySelectorAll('.branch-tab').forEach(function (tab) {
+          var active = tab.getAttribute('data-branch') === state.branch;
+          tab.classList.toggle('is-active', active);
+          tab.setAttribute('aria-selected', String(active));
+          var dot = tab.querySelector('.branch-tab__dot');
+          if (dot) dot.textContent = active ? '● Selected Space' : '○ Tap to Switch';
+        });
+        document.getElementById('branchSelect').value = state.branch;
+      }
+
+      function switchBranch(branchId) {
+        if (!BRANCHES[branchId] || state.branch === branchId) return;
+        state.branch = branchId;
+        state.selectedStartHour = null;
+        renderBranchUI();
+        subscribeAvailability();
+        updatePriceSummary();
+      }
+
+      document.querySelectorAll('.branch-tab').forEach(function (tab) {
+        tab.addEventListener('click', function () { switchBranch(tab.getAttribute('data-branch')); });
+      });
+      document.getElementById('branchSelect').addEventListener('change', function (e) {
+        switchBranch(e.target.value);
+      });
+
+      /* =========================================================
+         7. THREE-CARD SESSION TYPES & PRICING
+         ========================================================= */
+      function populatePackageDropdown() {
+        var sel = document.getElementById('packageSelect');
+        sel.innerHTML = '';
+        SESSION_ORDER.forEach(function (pid) {
+          var p = PACKAGES[pid];
+          var opt = document.createElement('option');
+          opt.value = p.id;
+          opt.textContent = p.shortName + ' (' + p.durationHours + ' Hr' + (p.durationHours > 1 ? 's' : '') + ') — ' + money(p.price);
+          sel.appendChild(opt);
+        });
+        sel.value = state.packageId;
+      }
+
+      function renderPackages() {
+        var grid = document.getElementById('packagesGrid');
+        grid.innerHTML = '';
+        SESSION_ORDER.forEach(function (pid) {
+          var p = PACKAGES[pid];
+          var card = h('article', 'pkg-card' + (p.featured ? ' is-featured' : '') + (state.packageId === p.id ? ' is-selected' : ''));
+          if (p.badge) card.appendChild(h('span', 'pkg-card__badge', p.badge));
+          card.appendChild(h('span', 'pkg-card__dur', p.durationHours + ' Hour' + (p.durationHours > 1 ? 's' : '')));
+          card.appendChild(h('h3', 'pkg-card__name', p.name));
+          card.appendChild(h('div', 'pkg-card__price', money(p.price)));
+          card.appendChild(h('div', 'pkg-card__meta', 'Base Capacity: ' + p.baseGuests + ' Persons \u2022 Extra: ' + money(p.extraGuestRate) + '/person'));
+
+          var ul = h('ul', 'pkg-card__list');
+          p.features.forEach(function (f) { ul.appendChild(h('li', '', f)); });
+          card.appendChild(ul);
+
+          var btn = h('button', 'btn ' + (state.packageId === p.id ? 'btn--gold' : 'btn--emerald'), state.packageId === p.id ? 'Selected ✓' : 'Select Session');
+          btn.type = 'button';
+          btn.addEventListener('click', function () {
+            selectPackage(p.id);
+            document.getElementById('book').scrollIntoView({ behavior: 'smooth' });
+          });
+          card.appendChild(btn);
+          grid.appendChild(card);
+        });
+      }
+
+      function selectPackage(pkgId) {
+        var p = PACKAGES[pkgId];
+        if (!p) return;
+        state.packageId = p.id;
+        state.selectedStartHour = null;
+
+        var personsInput = document.getElementById('totalPersons');
+        personsInput.min = 1;
+        state.totalPersons = p.baseGuests;
+        personsInput.value = state.totalPersons;
+        document.getElementById('baseGuestsHint').textContent = 'Base ' + p.baseGuests;
+        document.getElementById('extraGuestHint').textContent = 'Base ' + p.baseGuests + ' persons included; extra persons at ' + money(p.extraGuestRate) + '/person.';
+
+        document.getElementById('packageSelect').value = p.id;
+        renderPackages();
+        renderSlotGrid();
+        updatePriceSummary();
+      }
+
+      document.getElementById('packageSelect').addEventListener('change', function (e) {
+        selectPackage(e.target.value);
+      });
+
+      /* =========================================================
+         8. INTERACTIVE HOURLY SLOT BOOKING GRID + FIREBASE LOCKS
+         ========================================================= */
+      function parseLegacySlotHours(slotStr) {
+        var map = {
+          '11 AM - 2 PM': [11, 12, 13],
+          '3 PM - 6 PM': [15, 16, 17],
+          '7 PM - 10 PM': [19, 20, 21]
+        };
+        if (map[slotStr]) return map[slotStr];
+        return [];
+      }
+
+      function getHourState(hour) {
+        var now = Date.now();
+        // 1. Check atomic aryx_studio_locks
+        var lock = state.slotLocks && state.slotLocks[pad(hour)];
+        if (lock) {
+          if (lock.status === 'confirmed') return { status: 'booked' };
+          if (lock.status === 'hold' && lock.expiresAt > now) {
+            return { status: 'hold', expiresAt: lock.expiresAt };
+          }
+        }
+        // 2. Check confirmed records in aryx_studio_bookings
+        for (var i = 0; i < state.legacyBookings.length; i++) {
+          var b = state.legacyBookings[i];
+          var bBranch = b.branch || 'Main Studio';
+          if (bBranch !== state.branch) continue;
+          if ((b.bookingStatus === 'confirmed' || b.status === 'confirmed')) {
+            if (typeof b.startHour === 'number' && typeof b.durationHours === 'number') {
+              if (hour >= b.startHour && hour < b.startHour + b.durationHours) return { status: 'booked' };
+            } else if (b.slot) {
+              var hrs = parseLegacySlotHours(b.slot);
+              if (hrs.indexOf(hour) !== -1) return { status: 'booked' };
+            }
+          }
+        }
+        // 3. Past hour check if bookingDate is today
+        if (state.bookingDate === todayISO()) {
+          var currentHour = new Date().getHours();
+          if (hour <= currentHour) return { status: 'unavailable', reason: 'Past' };
+        }
+        return { status: 'available' };
+      }
+
+      function canStartPackageAt(startHour, duration) {
+        if (startHour + duration > 24) return false;
+        for (var hIdx = startHour; hIdx < startHour + duration; hIdx++) {
+          if (getHourState(hIdx).status !== 'available') return false;
+        }
+        return true;
+      }
+
+      function renderSlotGrid() {
+        var grid = document.getElementById('slotGrid');
+        var pkg = PACKAGES[state.packageId];
+        var dur = pkg.durationHours;
+        grid.innerHTML = '';
+
+        if (!state.bookingDate) {
+          document.getElementById('slotSelectedText').textContent = 'Choose a booking date above to view live hourly availability.';
+          document.getElementById('slotDurationTag').textContent = dur + ' Hr' + (dur > 1 ? 's' : '');
+        }
+
+        for (var hour = 9; hour <= 23; hour++) {
+          (function (hr) {
+            var hs = getHourState(hr);
+            var isSelected = state.selectedStartHour !== null && hr >= state.selectedStartHour && hr < state.selectedStartHour + dur;
+            var canStart = state.bookingDate && canStartPackageAt(hr, dur);
+
+            var btn = h('button', 'slot-cell');
+            btn.type = 'button';
+
+            var stateLabel = 'Available';
+            if (isSelected) {
+              btn.classList.add('is-selected');
+              stateLabel = 'Selected';
+            } else if (hs.status === 'booked') {
+              btn.classList.add('is-booked');
+              btn.disabled = true;
+              stateLabel = 'Booked';
+            } else if (hs.status === 'hold') {
+              btn.classList.add('is-hold');
+              btn.disabled = true;
+              var secs = Math.max(0, Math.ceil((hs.expiresAt - Date.now()) / 1000));
+              stateLabel = 'Hold ' + Math.floor(secs / 60) + ':' + pad(secs % 60);
+            } else if (!state.bookingDate || hs.status === 'unavailable' || !canStart) {
+              btn.classList.add('is-unavailable');
+              btn.disabled = true;
+              stateLabel = !state.bookingDate ? 'Pick Date' : (hs.reason === 'Past' ? 'Past' : 'Fits < ' + dur + 'h');
+            }
+
+            btn.appendChild(h('span', 'slot-cell__time', formatHour12(hr)));
+            btn.appendChild(h('span', 'slot-cell__state', stateLabel));
+
+            btn.addEventListener('click', function () {
+              if (!state.bookingDate) {
+                toast('Please select a booking date first.', true);
+                return;
+              }
+              if (!canStartPackageAt(hr, dur)) return;
+              state.selectedStartHour = hr;
+              document.getElementById('slotErr').textContent = '';
+              renderSlotGrid();
+              updatePriceSummary();
+            });
+
+            grid.appendChild(btn);
+          })(hour);
+        }
+
+        if (state.selectedStartHour !== null) {
+          if (!canStartPackageAt(state.selectedStartHour, dur)) {
+            state.selectedStartHour = null;
+          }
+        }
+        var barText = document.getElementById('slotSelectedText');
+        if (state.selectedStartHour !== null) {
+          barText.textContent = 'Selected: ' + formatSlotRange(state.selectedStartHour, dur) + ' (' + formatDate(state.bookingDate) + ')';
+        } else if (state.bookingDate) {
+          barText.textContent = 'Tap any available start hour for your ' + dur + '-hour session.';
+        }
+        document.getElementById('slotDurationTag').textContent = dur + ' Hour' + (dur > 1 ? 's' : '');
+      }
+
+      function subscribeAvailability() {
+        if (state.activeLockRef) { state.activeLockRef.off(); state.activeLockRef = null; }
+        if (state.activeBookingsRef) { state.activeBookingsRef.off(); state.activeBookingsRef = null; }
+        state.slotLocks = {};
+        state.legacyBookings = [];
+
+        if (!db || !state.bookingDate) {
+          renderSlotGrid();
+          return;
+        }
+
+        state.activeLockRef = db.ref(LOCKS_NODE + '/' + state.branch + '/' + state.bookingDate);
+        state.activeLockRef.on('value', function (snap) {
+          state.slotLocks = snap.val() || {};
+          renderSlotGrid();
+        });
+
+        state.activeBookingsRef = db.ref(BOOKINGS_NODE);
+        state.activeBookingsRef.on('value', function (snap) {
+          var list = [];
+          snap.forEach(function (child) {
+            var v = child.val();
+            if (!v) return;
+            var d = v.bookingDate || v.date;
+            if (d === state.bookingDate) list.push(v);
+          });
+          state.legacyBookings = list;
+          renderSlotGrid();
+        });
+      }
+
+      setInterval(function () {
+        if (state.bookingDate) renderSlotGrid();
+      }, 15000);
+
+      /* =========================================================
+         9. LIVE PRICE SUMMARY & CALCULATION ENGINE
+         ========================================================= */
+      function computePricing() {
+        var pkg = PACKAGES[state.packageId];
+        var persons = Math.max(1, state.totalPersons || pkg.baseGuests);
+        var extraGuests = Math.max(0, persons - pkg.baseGuests);
+        var extraGuestCharge = extraGuests * pkg.extraGuestRate;
+
+        var totalBookingValue = pkg.price + extraGuestCharge;
+        var venueAdvance = Math.min(PAYMENT_CONFIG.venueAdvance, totalBookingValue);
+        var gatewayFee = PAYMENT_CONFIG.gatewayFee;
+        var onlinePaymentAmount = venueAdvance + gatewayFee;
+        var balanceAtVenue = Math.max(0, totalBookingValue - venueAdvance);
+
+        return {
+          pkg: pkg,
+          persons: persons,
+          extraGuests: extraGuests,
+          extraGuestCharge: extraGuestCharge,
+          totalBookingValue: totalBookingValue,
+          venueAdvance: venueAdvance,
+          gatewayFee: gatewayFee,
+          onlinePaymentAmount: onlinePaymentAmount,
+          balanceAtVenue: balanceAtVenue
+        };
+      }
+
+      function updatePriceSummary() {
+        var c = computePricing();
+        var br = BRANCHES[state.branch] || BRANCHES['Main Studio'];
+        document.getElementById('sumBranch').textContent = br.name;
+        document.getElementById('sumPackage').textContent = c.pkg.shortName + ' (' + c.pkg.durationHours + ' Hr' + (c.pkg.durationHours > 1 ? 's' : '') + ')';
+        document.getElementById('sumSlot').textContent = state.selectedStartHour !== null
+          ? formatSlotRange(state.selectedStartHour, c.pkg.durationHours)
+          : 'Not selected';
+        document.getElementById('sumGuests').textContent = c.persons + ' (Base: ' + c.pkg.baseGuests + (c.extraGuests ? ', +' + c.extraGuests + ' extra' : '') + ')';
+        document.getElementById('sumPkgPrice').textContent = money(c.pkg.price);
+        document.getElementById('sumExtraGuests').textContent = money(c.extraGuestCharge);
+        document.getElementById('sumTotal').textContent = money(c.totalBookingValue);
+        document.getElementById('sumOnlinePay').textContent = money(c.onlinePaymentAmount);
+        document.getElementById('sumGatewayFee').textContent = money(c.gatewayFee);
+        document.getElementById('sumBalance').textContent = money(c.balanceAtVenue);
+
+        var submitBtn = document.getElementById('submitBtn');
+        submitBtn.textContent = 'Pay ' + money(c.onlinePaymentAmount) + ' Online & Confirm Booking';
+      }
+
+      /* =========================================================
+         10. FORM INTERACTIONS & VALIDATION
+         ========================================================= */
+      var dateInput = document.getElementById('bookingDate');
+      dateInput.min = todayISO();
+      dateInput.addEventListener('change', function () {
+        state.bookingDate = dateInput.value;
+        state.selectedStartHour = null;
+        document.getElementById('bookingDateErr').textContent = '';
+        subscribeAvailability();
+        updatePriceSummary();
+      });
+
+      var personsInput = document.getElementById('totalPersons');
+      function setPersons(val) {
+        var n = parseInt(val, 10);
+        if (isNaN(n) || n < 1) n = 1;
+        if (n > 100) n = 100;
+        state.totalPersons = n;
+        personsInput.value = n;
+        document.getElementById('totalPersonsErr').textContent = '';
+        updatePriceSummary();
+      }
+      document.getElementById('guestsMinus').addEventListener('click', function () { setPersons(state.totalPersons - 1); });
+      document.getElementById('guestsPlus').addEventListener('click', function () { setPersons(state.totalPersons + 1); });
+      personsInput.addEventListener('change', function () { setPersons(personsInput.value); });
+
+      var contactInput = document.getElementById('contactNumber');
+      var waInput = document.getElementById('whatsappNumber');
+      var sameCheck = document.getElementById('sameAsContact');
+      sameCheck.addEventListener('change', function () {
+        if (sameCheck.checked) {
+          waInput.value = contactInput.value;
+          waInput.readOnly = true;
+          document.getElementById('whatsappNumberErr').textContent = '';
+        } else {
+          waInput.readOnly = false;
+        }
+      });
+      contactInput.addEventListener('input', function () {
+        if (sameCheck.checked) waInput.value = contactInput.value;
+      });
+
+      function validateForm() {
+        var ok = true;
+        function setErr(id, msg) {
+          document.getElementById(id).textContent = msg || '';
+          if (msg) ok = false;
+        }
+
+        var name = document.getElementById('customerName').value.trim();
+        setErr('customerNameErr', name.length < 2 ? 'Please enter your full name.' : '');
+
+        var contact = normalizePhone(contactInput.value);
+        setErr('contactNumberErr', !contact ? 'Enter a valid 10-digit Indian mobile number.' : '');
+
+        var wa = normalizePhone(waInput.value);
+        setErr('whatsappNumberErr', !wa ? 'Enter a valid 10-digit WhatsApp number.' : '');
+
+        var cType = document.getElementById('celebrationType').value;
+        setErr('celebrationTypeErr', !cType ? 'Please select a session or event purpose.' : '');
+
+        setErr('bookingDateErr', (!state.bookingDate || state.bookingDate < todayISO()) ? 'Please select today or a future date.' : '');
+
+        var pkg = PACKAGES[state.packageId];
+        if (state.selectedStartHour === null || !canStartPackageAt(state.selectedStartHour, pkg.durationHours)) {
+          setErr('slotErr', 'Please select an available hourly slot.');
+        } else {
+          setErr('slotErr', '');
+        }
+
+        if (state.totalPersons < 1) {
+          setErr('totalPersonsErr', 'Please enter at least 1 person.');
+        } else {
+          setErr('totalPersonsErr', '');
+        }
+
+        var termsOk = document.getElementById('termsAccept').checked;
+        setErr('termsErr', !termsOk ? 'You must accept the Terms & Conditions to proceed.' : '');
+
+        if (!ok) return null;
+        return {
+          customerName: name,
+          contactNumber: contact,
+          whatsappNumber: wa,
+          celebrationType: cType
+        };
+      }
+
+      /* =========================================================
+         11. ATOMIC SLOT HOLD + RAZORPAY CHECKOUT + CONFIRMATION
+         ========================================================= */
+      function acquireSlotHold(branch, date, startHour, duration, bookingId) {
+        var ref = db.ref(LOCKS_NODE + '/' + branch + '/' + date);
+        var now = Date.now();
+        return ref.transaction(function (current) {
+          var map = current ? Object.assign({}, current) : {};
+          for (var hIdx = startHour; hIdx < startHour + duration; hIdx++) {
+            var key = pad(hIdx);
+            var existing = map[key];
+            if (existing) {
+              if (existing.status === 'confirmed') return undefined; // abort
+              if (existing.status === 'hold' && existing.expiresAt > now && existing.bookingId !== bookingId) return undefined; // abort
+            }
+          }
+          for (var hSet = startHour; hSet < startHour + duration; hSet++) {
+            map[pad(hSet)] = {
+              status: 'hold',
+              bookingId: bookingId,
+              expiresAt: now + PAYMENT_CONFIG.holdTtlMs
+            };
+          }
+          return map;
+        }).then(function (res) {
+          if (!res.committed) {
+            var err = new Error('slot-taken');
+            err.code = 'slot-taken';
+            throw err;
+          }
+        });
+      }
+
+      function releaseSlotHold(branch, date, startHour, duration, bookingId) {
+        if (!db) return Promise.resolve();
+        var ref = db.ref(LOCKS_NODE + '/' + branch + '/' + date);
+        return ref.transaction(function (current) {
+          if (!current) return current;
+          var map = Object.assign({}, current);
+          for (var hIdx = startHour; hIdx < startHour + duration; hIdx++) {
+            var key = pad(hIdx);
+            if (map[key] && map[key].status === 'hold' && map[key].bookingId === bookingId) {
+              delete map[key];
+            }
+          }
+          return map;
+        });
+      }
+
+      function confirmSlotLock(branch, date, startHour, duration, bookingId) {
+        var ref = db.ref(LOCKS_NODE + '/' + branch + '/' + date);
+        return ref.transaction(function (current) {
+          var map = current ? Object.assign({}, current) : {};
+          for (var hIdx = startHour; hIdx < startHour + duration; hIdx++) {
+            var key = pad(hIdx);
+            if (map[key] && map[key].status === 'confirmed' && map[key].bookingId !== bookingId) {
+              return undefined;
+            }
+            map[key] = { status: 'confirmed', bookingId: bookingId };
+          }
+          return map;
+        });
+      }
+
+      function generateBookingId() {
+        return 'ARYX-' + Math.floor(100000 + Math.random() * 900000);
+      }
+
+      document.getElementById('bookingForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (state.processing) return;
+
+        var clean = validateForm();
+        if (!clean) {
+          toast('Please complete all required fields.', true);
+          return;
+        }
+        if (!db) {
+          showNotice('Service Unavailable', 'Booking database is currently unavailable. Please contact ' + BRAND.phoneDisplay + '.');
+          return;
+        }
+        if (typeof Razorpay === 'undefined') {
+          showNotice('Payment Unavailable', 'Razorpay could not be loaded. Please check your internet connection and refresh.');
+          return;
+        }
+
+        var pricing = computePricing();
+        var br = BRANCHES[state.branch] || BRANCHES['Main Studio'];
+        var startHour = state.selectedStartHour;
+        var duration = pricing.pkg.durationHours;
+        var pendingId = generateBookingId();
+        var slotStr = formatSlotRange(startHour, duration);
+        var statusEl = document.getElementById('formStatus');
+
+        state.processing = true;
+        document.getElementById('submitBtn').disabled = true;
+        statusEl.textContent = 'Reserving slot hold\u2026';
+
+        acquireSlotHold(state.branch, state.bookingDate, startHour, duration, pendingId)
+          .then(function () {
+            if (BACKEND_CONFIG.enabled && BACKEND_CONFIG.createOrderUrl) {
+              statusEl.textContent = 'Creating secure payment order\u2026';
+              return fetch(BACKEND_CONFIG.createOrderUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  branch: state.branch,
+                  bookingDate: state.bookingDate,
+                  startHour: startHour,
+                  packageId: pricing.pkg.id,
+                  totalPersons: pricing.persons,
+                  pendingBookingId: pendingId
+                })
+              }).then(function (r) { return r.json(); });
+            }
+            return { orderId: null, amount: pricing.onlinePaymentAmount * 100, currency: 'INR' };
+          })
+          .then(function (orderData) {
+            var paid = false;
+            var rzpOptions = {
+              key: PAYMENT_CONFIG.razorpayKey,
+              amount: orderData.amount || pricing.onlinePaymentAmount * 100,
+              currency: orderData.currency || 'INR',
+              name: BRAND.name + ' (' + br.shortName + ')',
+              description: pricing.pkg.shortName + ' \u2022 ' + slotStr + ' (' + formatDate(state.bookingDate) + ')',
+              prefill: { name: clean.customerName, contact: clean.contactNumber },
+              theme: { color: '#10B981' },
+              handler: function (response) {
+                paid = true;
+                var nowIso = new Date().toISOString();
+                var record = {
+                  bookingId: pendingId,
+                  branch: state.branch,
+                  spaceName: br.name,
+                  customerName: clean.customerName,
+                  contactNumber: clean.contactNumber,
+                  whatsappNumber: clean.whatsappNumber,
+                  celebrationType: clean.celebrationType,
+                  bookingDate: state.bookingDate,
+                  date: state.bookingDate,
+                  startHour: startHour,
+                  startTime: formatHour12(startHour),
+                  endTime: formatHour12(startHour + duration),
+                  slot: slotStr,
+                  durationHours: duration,
+                  packageId: pricing.pkg.id,
+                  packageName: pricing.pkg.shortName,
+                  packagePrice: pricing.pkg.price,
+                  baseGuests: pricing.pkg.baseGuests,
+                  totalPersons: pricing.persons,
+                  extraGuests: pricing.extraGuests,
+                  extraGuestRate: pricing.pkg.extraGuestRate,
+                  extraGuestCharge: pricing.extraGuestCharge,
+                  totalBookingValue: pricing.totalBookingValue,
+                  venueAdvance: pricing.venueAdvance,
+                  gatewayFee: pricing.gatewayFee,
+                  onlinePaymentAmount: pricing.onlinePaymentAmount,
+                  balanceAtVenue: pricing.balanceAtVenue,
+                  razorpayOrderId: response.razorpay_order_id || orderData.orderId || '',
+                  razorpayPaymentId: response.razorpay_payment_id || '',
+                  paymentStatus: BACKEND_CONFIG.enabled ? 'paid_verified' : 'paid_client_unverified_demo',
+                  bookingStatus: 'confirmed',
+                  status: 'confirmed',
+                  createdAt: nowIso,
+                  updatedAt: nowIso
+                };
+
+                statusEl.textContent = 'Finalizing confirmation\u2026';
+
+                var verifyPromise = (BACKEND_CONFIG.enabled && BACKEND_CONFIG.verifyPaymentUrl)
+                  ? fetch(BACKEND_CONFIG.verifyPaymentUrl, {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        razorpay_order_id: response.razorpay_order_id,
+                        razorpay_payment_id: response.razorpay_payment_id,
+                        razorpay_signature: response.razorpay_signature,
+                        bookingPayload: record
+                      })
+                    }).then(function (r) { return r.json(); })
+                  : db.ref(BOOKINGS_NODE + '/' + pendingId).set(record).then(function () { return { verified: true }; });
+
+                verifyPromise
+                  .then(function () {
+                    return confirmSlotLock(state.branch, state.bookingDate, startHour, duration, pendingId);
+                  })
+                  .then(function () {
+                    saveBookingLocally(record);
+                    state.processing = false;
+                    document.getElementById('submitBtn').disabled = false;
+                    statusEl.textContent = '';
+                    state.selectedStartHour = null;
+                    renderSlotGrid();
+                    openConfirmation(record);
+                  })
+                  .catch(function (err) {
+                    console.error(err);
+                    state.processing = false;
+                    document.getElementById('submitBtn').disabled = false;
+                    statusEl.textContent = '';
+                    showNotice('Confirmation Issue', 'Payment ID ' + record.razorpayPaymentId + ' was captured. Please contact ' + BRAND.phoneDisplay + ' to finalize your slot.');
+                  });
+              },
+              modal: {
+                ondismiss: function () {
+                  if (paid) return;
+                  releaseSlotHold(state.branch, state.bookingDate, startHour, duration, pendingId);
+                  state.processing = false;
+                  document.getElementById('submitBtn').disabled = false;
+                  statusEl.textContent = '';
+                  toast('Payment cancelled. Your slot hold has been released.', true);
+                }
+              }
+            };
+            if (orderData.orderId) rzpOptions.order_id = orderData.orderId;
+            var rzp = new Razorpay(rzpOptions);
+            rzp.on('payment.failed', function (resp) {
+              releaseSlotHold(state.branch, state.bookingDate, startHour, duration, pendingId);
+              state.processing = false;
+              document.getElementById('submitBtn').disabled = false;
+              statusEl.textContent = '';
+              showNotice('Payment Failed', (resp && resp.error && resp.error.description) ? resp.error.description : 'Payment could not be completed. Slot hold released.');
+            });
+            rzp.open();
+          })
+          .catch(function (err) {
+            state.processing = false;
+            document.getElementById('submitBtn').disabled = false;
+            statusEl.textContent = '';
+            if (err && err.code === 'slot-taken') {
+              showNotice('Slot Unavailable', 'This slot was just reserved by another customer. Please choose another available hour.');
+            } else {
+              showNotice('Error', 'Could not initiate booking. Please try again.');
+            }
+          });
+      });
+
+      /* =========================================================
+         12. LOCAL BOOKING HISTORY & MODALS
+         ========================================================= */
+      function readHistory() {
+        try {
+          var raw = localStorage.getItem(HISTORY_KEY);
+          var arr = raw ? JSON.parse(raw) : [];
+          return Array.isArray(arr) ? arr : [];
+        } catch (e) { return []; }
+      }
+      function saveBookingLocally(rec) {
+        try {
+          var list = readHistory();
+          var exists = list.some(function (x) { return x.bookingId === rec.bookingId; });
+          if (!exists) {
+            list.unshift(rec);
+            localStorage.setItem(HISTORY_KEY, JSON.stringify(list));
+          }
+          refreshCount();
+        } catch (e) { console.error(e); }
+      }
+      function refreshCount() {
+        var n = readHistory().length;
+        document.querySelectorAll('.js-mb-count').forEach(function (el) { el.textContent = String(n); });
+      }
+
+      var openStack = [];
+      function openModal(ov) {
+        if (!ov) return;
+        ov.hidden = false;
+        document.documentElement.classList.add('mb-lock');
+        openStack.push(ov);
+        requestAnimationFrame(function () { ov.classList.add('is-open'); });
+      }
+      function closeModal(ov) {
+        if (!ov) return;
+        ov.classList.remove('is-open');
+        openStack = openStack.filter(function (x) { return x !== ov; });
+        setTimeout(function () { ov.hidden = true; }, 260);
+        if (!openStack.length) document.documentElement.classList.remove('mb-lock');
+      }
+      document.getElementById('mbClose').addEventListener('click', function () { closeModal(document.getElementById('mbOverlay')); });
+      document.getElementById('cfClose').addEventListener('click', function () { closeModal(document.getElementById('cfOverlay')); });
+      document.getElementById('noticeClose').addEventListener('click', function () { closeModal(document.getElementById('noticeOverlay')); });
+      document.getElementById('noticeOk').addEventListener('click', function () { closeModal(document.getElementById('noticeOverlay')); });
+
+      function findBooking(id) {
+        var list = readHistory();
+        for (var i = 0; i < list.length; i++) if (list[i].bookingId === id) return list[i];
+        return null;
+      }
+
+      function renderBookingsList() {
+        var list = readHistory();
+        var body = document.getElementById('mbList');
+        body.innerHTML = '';
+        if (!list.length) {
+          body.appendChild(h('p', '', 'No confirmed bookings saved on this device yet.'));
+          return;
+        }
+        list.forEach(function (r) {
+          var br = BRANCHES[r.branch] || BRANCHES['Main Studio'];
+          var card = h('article', 'bk-card');
+          var top = h('div', 'bk-card__top');
+          top.appendChild(h('span', 'bk-id', r.bookingId || 'ARYX'));
+          top.appendChild(h('span', 'bk-chip', 'Confirmed'));
+          card.appendChild(top);
+
+          var grid = h('dl', 'bk-grid');
+          var items = [
+            ['Space', r.spaceName || br.name],
+            ['Customer', r.customerName || 'Guest'],
+            ['Session', r.packageName || 'Session'],
+            ['Persons', String(r.totalPersons || 1)],
+            ['Date', formatDate(r.bookingDate || r.date)],
+            ['Slot', r.slot || ((r.startTime || '') + ' – ' + (r.endTime || ''))]
+          ];
+          items.forEach(function (it) {
+            var d = document.createElement('div');
+            d.appendChild(h('dt', '', it[0]));
+            d.appendChild(h('dd', '', it[1]));
+            grid.appendChild(d);
+          });
+          card.appendChild(grid);
+
+          var pay = h('div', 'bk-pay');
+          var r1 = h('div', 'bk-pay__row'); r1.appendChild(h('span', '', 'Online Advance Paid')); r1.appendChild(h('b', '', money(r.onlinePaymentAmount || PAYMENT_CONFIG.venueAdvance)));
+          var r2 = h('div', 'bk-pay__row bk-pay__row--due'); r2.appendChild(h('span', '', 'Balance Payable at Venue')); r2.appendChild(h('b', '', money(r.balanceAtVenue !== undefined ? r.balanceAtVenue : 0)));
+          pay.appendChild(r1); pay.appendChild(r2);
+          card.appendChild(pay);
+
+          var acts = h('div', 'bk-actions');
+          var dl = h('button', 'btn btn--emerald', '📥 Download Booking Pass (PNG)');
+          dl.type = 'button';
+          dl.addEventListener('click', function () { downloadPassPNG(r); });
+          var wa = h('button', 'btn btn--ghost', '📲 Send Copy on WhatsApp');
+          wa.type = 'button';
+          wa.addEventListener('click', function () { openWhatsAppCopy(r); });
+          acts.appendChild(dl); acts.appendChild(wa);
+          card.appendChild(acts);
+          body.appendChild(card);
+        });
+      }
+
+      document.querySelectorAll('.js-open-bookings').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          setMenu(false);
+          renderBookingsList();
+          openModal(document.getElementById('mbOverlay'));
+        });
+      });
+
+      function openConfirmation(r) {
+        var br = BRANCHES[r.branch] || BRANCHES['Main Studio'];
+        document.getElementById('cfBookingId').textContent = r.bookingId;
+        document.getElementById('cfPanel').setAttribute('data-id', r.bookingId);
+        var sum = document.getElementById('cfSummary');
+        sum.innerHTML = '';
+        [
+          ['Space', r.spaceName || br.name],
+          ['Session', r.packageName],
+          ['Date', formatDate(r.bookingDate)],
+          ['Time', r.slot],
+          ['Persons', String(r.totalPersons)],
+          ['Online Advance Paid', money(r.onlinePaymentAmount || PAYMENT_CONFIG.venueAdvance)],
+          ['Balance Payable at Venue', money(r.balanceAtVenue)]
+        ].forEach(function (row) {
+          var div = document.createElement('div');
+          div.appendChild(h('dt', '', row[0]));
+          div.appendChild(h('dd', '', row[1]));
+          sum.appendChild(div);
+        });
+        openModal(document.getElementById('cfOverlay'));
+      }
+
+      document.getElementById('cfDownload').addEventListener('click', function () {
+        var r = findBooking(document.getElementById('cfPanel').getAttribute('data-id'));
+        if (r) downloadPassPNG(r);
+      });
+      document.getElementById('cfWhatsApp').addEventListener('click', function () {
+        var r = findBooking(document.getElementById('cfPanel').getAttribute('data-id'));
+        if (r) openWhatsAppCopy(r);
+      });
+      document.getElementById('cfView').addEventListener('click', function () {
+        closeModal(document.getElementById('cfOverlay'));
+        renderBookingsList();
+        openModal(document.getElementById('mbOverlay'));
+      });
+
+      function openWhatsAppCopy(r) {
+        var br = BRANCHES[r.branch] || BRANCHES['Main Studio'];
+        var msg = [
+          '⚡ *ARYXWEB — STUDIO & HALL BOOKING CONFIRMED*',
+          'Booking ID: ' + r.bookingId,
+          'Space: ' + (r.spaceName || br.name),
+          'Customer: ' + r.customerName,
+          'Session: ' + r.packageName,
+          'Date: ' + formatDate(r.bookingDate || r.date),
+          'Time: ' + (r.slot || ''),
+          'Persons: ' + (r.totalPersons || 1),
+          'Online Advance Paid: ' + money(r.onlinePaymentAmount || PAYMENT_CONFIG.venueAdvance),
+          'Balance Payable at Venue: ' + money(r.balanceAtVenue || 0),
+          'Contact: ' + BRAND.phoneDisplay
+        ].join('\n');
+        window.open('https://wa.me/' + BRAND.whatsappDigits + '?text=' + encodeURIComponent(msg), '_blank', 'noopener,noreferrer');
+      }
+
+      /* =========================================================
+         13. INSTANT PNG DIGITAL BOOKING PASS GENERATOR
+         ========================================================= */
+      function drawCrestOnCanvas(c, cx, cy, r) {
+        c.save();
+        c.beginPath(); c.arc(cx, cy, r, 0, Math.PI * 2); c.fillStyle = '#0B0F19'; c.fill();
+        c.strokeStyle = '#F59E0B'; c.lineWidth = 3; c.stroke();
+        c.beginPath(); c.arc(cx, cy, r - 7, 0, Math.PI * 2);
+        c.strokeStyle = '#10B981'; c.lineWidth = 1.6; c.stroke();
+        c.textAlign = 'center';
+        c.fillStyle = '#F59E0B';
+        c.font = '800 32px Poppins, sans-serif';
+        c.fillText('AX', cx, cy + 11);
+        c.restore();
+      }
+
+      function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+        var str = String(text || '');
+        var words = str.split(/\s+/);
+        var line = '';
+        var lines = [];
+
+        for (var i = 0; i < words.length; i++) {
+          var word = words[i];
+          var testLine = line ? line + ' ' + word : word;
+          if (ctx.measureText(testLine).width <= maxWidth) {
+            line = testLine;
+          } else {
+            if (line) {
+              lines.push(line);
+              line = '';
+            }
+            if (ctx.measureText(word).width > maxWidth) {
+              var chunk = '';
+              for (var k = 0; k < word.length; k++) {
+                var nextChunk = chunk + word[k];
+                if (ctx.measureText(nextChunk).width > maxWidth && chunk) {
+                  lines.push(chunk);
+                  chunk = word[k];
+                } else {
+                  chunk = nextChunk;
+                }
+              }
+              line = chunk;
+            } else {
+              line = word;
+            }
+          }
+        }
+        if (line) lines.push(line);
+        if (!lines.length) lines.push('');
+
+        for (var j = 0; j < lines.length; j++) {
+          ctx.fillText(lines[j], x, y + j * lineHeight);
+        }
+        return lines.length;
+      }
+
+      function downloadPassPNG(r) {
+        var W = 680, H = 1080, scale = 2;
+        var maxWidth = W - 112;
+        var lineHeight = 22;
+
+        var probeCv = document.createElement('canvas');
+        var probeCtx = probeCv.getContext('2d');
+        var br = BRANCHES[r.branch] || BRANCHES['Main Studio'];
+        var rows = [
+          ['Customer Name', r.customerName || 'Guest'],
+          ['Venue Space', r.spaceName || br.name],
+          ['Booking Date', formatDate(r.bookingDate || r.date)],
+          ['Time Slot', r.slot || ((r.startTime || '') + ' - ' + (r.endTime || ''))],
+          ['Selected Session', r.packageName || 'Session'],
+          ['Total Persons', String(r.totalPersons || 1) + ' Persons'],
+          ['Online Advance Paid', money(r.onlinePaymentAmount || PAYMENT_CONFIG.venueAdvance)],
+          ['Balance Payable at Venue', money(r.balanceAtVenue || 0)]
+        ];
+
+        probeCtx.font = '600 15px Poppins, sans-serif';
+        var totalExtraY = 0;
+        rows.forEach(function (row) {
+          var words = String(row[1] || '').split(/\s+/);
+          var line = '', count = 0;
+          words.forEach(function (w) {
+            var t = line ? line + ' ' + w : w;
+            if (probeCtx.measureText(t).width <= maxWidth) line = t;
+            else { count++; line = w; }
+          });
+          if (line) count++;
+          if (count > 1) totalExtraY += (count - 1) * lineHeight;
+        });
+        if (totalExtraY > 40) H += (totalExtraY - 40);
+
+        var cv = document.createElement('canvas');
+        cv.width = W * scale; cv.height = H * scale;
+        var c = cv.getContext('2d');
+        c.scale(scale, scale);
+
+        // Background
+        c.fillStyle = '#0B0F19';
+        c.fillRect(0, 0, W, H);
+
+        // Outer gold & inner emerald card border
+        c.strokeStyle = '#F59E0B';
+        c.lineWidth = 3;
+        c.strokeRect(20, 20, W - 40, H - 40);
+        c.strokeStyle = 'rgba(16, 185, 129, 0.45)';
+        c.lineWidth = 1.2;
+        c.strokeRect(30, 30, W - 60, H - 60);
+
+        // Crest
+        drawCrestOnCanvas(c, W / 2, 102, 50);
+
+        // Brand title & status
+        c.textAlign = 'center';
+        c.fillStyle = '#F8FAFC';
+        c.font = '800 28px Poppins, sans-serif';
+        c.fillText('ARYXWEB', W / 2, 190);
+
+        c.fillStyle = '#10B981';
+        c.font = '700 14px Poppins, sans-serif';
+        c.fillText('✓ CONFIRMED DIGITAL BOOKING PASS', W / 2, 222);
+
+        // Booking ID Box
+        c.fillStyle = '#131A2B';
+        c.fillRect(54, 246, W - 108, 78);
+        c.strokeStyle = '#F59E0B';
+        c.lineWidth = 1.5;
+        c.strokeRect(54, 246, W - 108, 78);
+        c.fillStyle = '#94A3B8';
+        c.font = '600 11px Montserrat, sans-serif';
+        c.fillText('BOOKING ID', W / 2, 272);
+        c.fillStyle = '#F59E0B';
+        c.font = '800 30px Poppins, sans-serif';
+        c.fillText(r.bookingId || 'ARYX-000000', W / 2, 310);
+
+        // Details rows with dynamic wrapping
+        var y = 370;
+        rows.forEach(function (row) {
+          c.textAlign = 'left';
+          c.fillStyle = '#94A3B8';
+          c.font = '600 12px Montserrat, sans-serif';
+          c.fillText(row[0].toUpperCase(), 56, y);
+
+          c.fillStyle = row[0] === 'Balance Payable at Venue' ? '#F59E0B' : (row[0] === 'Online Advance Paid' ? '#10B981' : '#F8FAFC');
+          c.font = '600 15px Poppins, sans-serif';
+          var lineCount = wrapText(c, String(row[1]), 56, y + 24, maxWidth, lineHeight);
+          var dividerY = y + 24 + (lineCount - 1) * lineHeight + 14;
+
+          c.strokeStyle = 'rgba(255,255,255,0.09)';
+          c.lineWidth = 1;
+          c.beginPath(); c.moveTo(56, dividerY); c.lineTo(W - 56, dividerY); c.stroke();
+          y = dividerY + 24;
+        });
+
+        // Footer
+        var footerY = Math.max(H - 112, y + 24);
+        c.textAlign = 'center';
+        c.fillStyle = '#10B981';
+        c.font = '600 14px Poppins, sans-serif';
+        c.fillText(BRAND.company + '  •  WhatsApp: ' + BRAND.phoneDisplay, W / 2, footerY);
+        c.fillStyle = '#94A3B8';
+        c.font = '500 12px Montserrat, sans-serif';
+        c.fillText('Present this confirmed digital pass at check-in. Valid Govt ID mandatory.', W / 2, footerY + 30);
+
+        cv.toBlob(function (blob) {
+          if (!blob) return;
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = url;
+          a.download = 'ARYXWEB-Pass-' + (r.bookingId || 'CONFIRMED') + '.png';
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(function () { document.body.removeChild(a); URL.revokeObjectURL(url); }, 1000);
+          toast('Digital Booking Pass downloaded.');
+        }, 'image/png');
+      }
+
+      /* =========================================================
+         14. BOOTSTRAP
+         ========================================================= */
+      renderBranchUI();
+      populatePackageDropdown();
+      selectPackage('dance_rehearsal');
+      refreshCount();
+    })();
+  </script>
+</body>
+</html>
